@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/voice_temp?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+
+mybatis:
+  config-location: classpath:mybatis.cfg.xml
+  type-aliases-package: com.kfs.voice.entity
+  mapper-locations:
+    - classpath:mapper/*.xml
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: NOT_EMPTY
+      db-type: MYSQL
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+xunfei:
+  iseHostUrl: https://ise-api.xfyun.cn/v2/open-ise
+  tssHostUrl: https://tts-api.xfyun.cn/v2/tts
+  appid: 4b26caaf
+  apiSecret: OTM0ZWJlYTI3ZDllYzcyNmVlNDgyZTlj
+  apiKey: 9b21822bb9f302913f49314e680cb906
+  tte: UTF8
+  vcn: xiaoyan
