@@ -20,7 +20,7 @@
 
   <div>
     <van-row justify="center" style="margin: 1rem 0 0 0">
-      <van-col span="10" >
+      <van-col span="10" @click="goTo()">
         <category-box :icon-src="require('../assets/trophy.png')" active-background-color="#E74C3C"></category-box>
       </van-col>
 

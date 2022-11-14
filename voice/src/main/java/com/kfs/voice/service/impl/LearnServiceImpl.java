@@ -63,7 +63,7 @@ public class LearnServiceImpl implements LearnService {
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream("xxx.pcm");
+            fos = new FileOutputStream("temp.pcm");
             fos.write(voiceFile.getBytes()); // 写入文件
 
             XunFeiUtil xunFeiUtil = new XunFeiUtil();

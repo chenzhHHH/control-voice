@@ -225,7 +225,7 @@ public class XunFeiUtil {
         String url = authUrl.replace("http://", "ws://").replace("https://", "wss://");
         Request request = new Request.Builder().url(url).build();
 
-        String file = "xxx.pcm";
+        String file = "temp.pcm";
 
         WebSocket webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
