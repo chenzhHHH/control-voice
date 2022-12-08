@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "uni-col": "../../node-modules/@dcloudio/uni-ui/lib/uni-col/uni-col",
-    "uni-rate": "../../node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate",
-    "uni-row": "../../node-modules/@dcloudio/uni-ui/lib/uni-row/uni-row"
-  }
-}
