@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "question-board": "../../components/questionBoard",
+    "uni-col": "../../node-modules/@dcloudio/uni-ui/lib/uni-col/uni-col",
+    "uni-row": "../../node-modules/@dcloudio/uni-ui/lib/uni-row/uni-row"
+  }
+}
