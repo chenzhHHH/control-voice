@@ -45,8 +45,6 @@ public class RecordController {
     @CrossOrigin
     @PostMapping("/recordVoice")
     public Result recordVoice(@RequestParam("sentenceId") String sentenceId, @RequestParam("wordId") String wordId, @RequestPart("voiceFile") MultipartFile voiceFile) {
-        System.out.println("--------------: " + sentenceId);
-
         Boolean isRecord = recordService.recordVoice(sentenceId, wordId, voiceFile);
 
         Result<String> result = new Result<>();
