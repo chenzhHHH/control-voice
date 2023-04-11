@@ -30,3 +30,9 @@ xunfei:
   apiKey: 9b21822bb9f302913f49314e680cb906
   tte: UTF8
   vcn: xiaoyan
+
+jwt:
+  header: "Authorization"
+  tokenPrefix: "Bearer "
+  secret: "kfsvoicetool"
+  expireTime: 1
