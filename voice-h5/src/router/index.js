@@ -21,15 +21,20 @@ const routes = [
     component: () => import('../views/CourseView.vue')
   },
   {
-    path: '/learn/:category',
-    name: 'learn',
-    component: () => import('../views/LearnView.vue')
+    path: '/my',
+    name: 'my',
+    component: () => import('../views/MyView.vue')
   },
   {
-    path: '/report/:examGroupId',
-    name: 'report',
-    component: () => import('../views/ReportView.vue')
+    path: '/record/:wordId',
+    name: 'record',
+    component: () => import('../views/RecordView.vue')
   }
+  // {
+  //   path: '/report/:examGroupId',
+  //   name: 'report',
+  //   component: () => import('../views/ReportView.vue')
+  // }
 ]
 
 const router = createRouter({

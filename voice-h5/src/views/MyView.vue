@@ -3,7 +3,7 @@
     <div class="title_box">语音录制</div>
   </div>
 </template>
-
+  
 <script>
 export default {
   components: {},
@@ -13,14 +13,13 @@ export default {
   methods: {},
 };
 </script>
-
-<style scoped lang="less">
+  
+  <style scoped lang="less">
 .container {
-  width: 20rem;
-  position: absolute;
-  left: 50%;
-  top:50%;
-  transform: translate(-50%, -70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20rem;
   .title_box {
     font-size: 5rem;
   }
