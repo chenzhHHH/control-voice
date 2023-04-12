@@ -15,7 +15,10 @@ import {
         Row,
         Image as VanImage,
         Icon,
-        Notify
+        Notify,
+        Form,
+        Field,
+        CellGroup
     } from 'vant';
 
 const app = createApp(App)
@@ -34,5 +37,8 @@ app
     .use(VanImage)
     .use(Icon)
     .use(Notify)
+    .use(Form)
+    .use(Field)
+    .use(CellGroup)
 
 app.mount('#app')

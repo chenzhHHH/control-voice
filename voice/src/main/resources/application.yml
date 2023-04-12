@@ -36,3 +36,6 @@ jwt:
   tokenPrefix: "Bearer "
   secret: "kfsvoicetool"
   expireTime: 1
+
+voice:
+  path: /Users/chenzhihang/Documents/upload/

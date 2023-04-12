@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("用户不存在");
         }
 
-        String token = JwtUtil.createToken(selectUser.getPhone());
+        String token = JwtUtil.createToken(selectUser);
 
         return new HashMap<>() {
             {

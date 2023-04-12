@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <div class="title_box">语音录制</div>
+    <div class="enter_box">
+      <div class="enter_box">语音录制</div>
+
+      <van-button class="enter_bt" round type="success" @click="toRecord()">开始录制</van-button>
+    </div>
   </div>
 </template>
 
@@ -10,7 +14,11 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    toRecord() {
+      this.$router.replace("/course");
+    },
+  },
 };
 </script>
 
@@ -19,10 +27,21 @@ export default {
   width: 20rem;
   position: absolute;
   left: 50%;
-  top:50%;
+  top: 50%;
   transform: translate(-50%, -70%);
-  .title_box {
-    font-size: 5rem;
+
+  .enter_box {
+    text-align: center;
+    .enter_box {
+      font-size: 3rem;
+      color: #dc7633;
+      margin-bottom: 2rem;
+    }
+
+    .enter_bt {
+      width: 10rem;
+      font-size: 1rem;
+    }
   }
 }
 </style>

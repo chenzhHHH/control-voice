@@ -21,6 +21,8 @@ public class User implements Serializable {
     private String id;
 
     private String username;
-    private String password;
     private String phone;
+    private String cnName;
+    private String password;
+    private Boolean isDelete;
 }
