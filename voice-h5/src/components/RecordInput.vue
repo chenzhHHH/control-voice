@@ -132,8 +132,8 @@ export default {
         },
       };
 
+      // eslint-disable-next-line
       that.$http.post("/record/recordVoice", formData, config).then((response) => {
-        console.log(response.data);
         that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "语音提交中" });
         that.triggerRefreshSentenceData();
       });
