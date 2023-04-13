@@ -1,10 +1,11 @@
 package com.kfs.voice.controller;
 
-import com.kfs.voice.entity.Word;
 import com.kfs.voice.enums.ResultEnum;
 import com.kfs.voice.service.impl.RecordServiceImpl;
 import com.kfs.voice.vo.Result;
+import com.kfs.voice.vo.SentenceNumVo;
 import com.kfs.voice.vo.SentenceVo;
+import com.kfs.voice.vo.WordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,24 +22,36 @@ public class RecordController {
 
     @CrossOrigin
     @PostMapping("/getWordList")
-    public Result getWordList() {
-        Result<List<Word>> result = new Result<>();
+    public Result getWordList(@RequestParam("userId") String userId) {
+        Result<List<WordVo>> result = new Result<>();
 
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
-        result.setData(recordService.getWordList());
+        result.setData(recordService.getWordList(userId));
 
         return result;
     }
 
     @CrossOrigin
     @PostMapping("/getSentenceListByWordId")
-    public Result getSentenceListByWordId(@RequestParam("userId") String userId, @RequestParam("wordId") String wordId) {
+    public Result getSentenceListByWordId(@RequestParam("userId") String userId, @RequestParam("wordId") String wordId, @RequestParam("filterType") String filterType) {
         Result<List<SentenceVo>> result = new Result<>();
 
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
-        result.setData(recordService.getSentenceList(userId, wordId));
+        result.setData(recordService.getSentenceList(userId, wordId, filterType));
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/getSentenceNumByWordId")
+    public Result getSentenceNumByWordId(@RequestParam("userId") String userId, @RequestParam("wordId") String wordId) {
+        Result<SentenceNumVo> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getSentenceNum(userId, wordId));
 
         return result;
     }
