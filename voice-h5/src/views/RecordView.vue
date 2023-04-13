@@ -6,13 +6,13 @@
   </div>
 
   <div class="container">
-    <RecordInput v-for="(item, index) in sentenceList" :key="index" :sentence="item" @triggerIsShowEvalOverlay="updateIsShowEvalOverlay"></RecordInput>
+    <RecordInput v-for="(item, index) in sentenceList" :key="index" :sentence="item" @triggerUpdateIsShowOverlay="updateIsShowOverlay" @triggerRefreshSentenceData="refreshSentenceData"></RecordInput>
   </div>
 
-  <van-overlay :show="isShowEvalOverlay" z-index="2">
+  <van-overlay :show="isShowOverlay" z-index="2">
     <div class="overlay-wrapper">
       <div class="overlay-block">
-        <van-loading size="2rem" color="#85929E">语音提交中</van-loading>
+        <van-loading size="2rem" color="#85929E">{{ showOverlayText }}</van-loading>
       </div>
     </div>
   </van-overlay>
@@ -30,7 +30,8 @@ export default {
   },
   data() {
     return {
-      isShowEvalOverlay: false,
+      isShowOverlay: false,
+      showOverlayText: "",
       sentenceList: [],
     };
   },
@@ -59,11 +60,17 @@ export default {
     goBack() {
       this.$router.replace("/course");
     },
-    updateIsShowEvalOverlay(isShowEvalOverlay) {
+    updateIsShowOverlay(obj) {
       let that = this;
 
-      that.isShowEvalOverlay = isShowEvalOverlay;
+      that.isShowOverlay = obj.isShowOverlay;
+      that.showOverlayText = obj.showOverlayText;
     },
+    refreshSentenceData() {
+      let that = this;
+
+      that.initSentenceData(this.$route.params.wordId);
+    }
   },
 };
 </script>

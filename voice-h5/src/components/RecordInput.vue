@@ -47,6 +47,13 @@ export default {
 
     that.isExistVoice = that.sentence.isRecord;
   },
+  watch: {
+    sentence(newSentence) {
+      let that = this;
+
+      that.isExistVoice = newSentence.isRecord;
+    },
+  },
   computed: {
     changeContainerColor() {
       let that = this;
@@ -91,7 +98,7 @@ export default {
     },
     startRecorder() {
       let that = this;
-      console.log("开始录音>>>");
+      // console.log("开始录音>>>");
 
       that.recorder.start().then(
         () => {},
@@ -107,10 +114,10 @@ export default {
 
       that.recorder.stop();
 
-      that.triggerIsShowEvalOverlay(true);
+      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "语音提交中" });
 
       let recordResult = that.getRecorder();
-      console.log("结束录音>>>", recordResult);
+      // console.log("结束录音>>>", recordResult);
 
       let formData = {
         userId: sessionStorage.getItem("userId"),
@@ -127,13 +134,16 @@ export default {
 
       that.$http.post("/record/recordVoice", formData, config).then((response) => {
         console.log(response.data);
-        that.triggerIsShowEvalOverlay(false);
+        that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "语音提交中" });
+        that.triggerRefreshSentenceData();
       });
 
       that.isRecording = false;
     },
     playRecorder() {
       let that = this;
+
+      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "回听音频" });
 
       let formData = {
         userId: sessionStorage.getItem("userId"),
@@ -150,11 +160,17 @@ export default {
         let dataTemp = response.data.data;
         let readAudio = new Audio(`data:audio/x-wav;base64, ` + dataTemp);
         readAudio.play();
+
+        readAudio.onended = () => {
+          that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "回听音频" });
+        };
       });
     },
-    triggerIsShowEvalOverlay(isShowEvalOverlay) {
-      let that = this;
-      that.$emit("triggerIsShowEvalOverlay", isShowEvalOverlay);
+    triggerUpdateIsShowOverlay(obj) {
+      this.$emit("triggerUpdateIsShowOverlay", obj);
+    },
+    triggerRefreshSentenceData() {
+      this.$emit("triggerRefreshSentenceData");
     },
   },
 };
