@@ -8,7 +8,7 @@
 
     <div style="height: 5rem"></div>
 
-    <van-tabbar v-model="active">
+    <van-tabbar v-model="active" v-if="$route.meta.showTab">
       <van-tabbar-item to="home" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="course" icon="service-o">录制</van-tabbar-item>
       <van-tabbar-item to="my" icon="user-o">我的</van-tabbar-item>

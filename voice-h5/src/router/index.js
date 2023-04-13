@@ -8,6 +8,7 @@ const routes = [
     component: () => import('../views/IndexView.vue'),
     meta: {
       requireAuth: true,
+      showTab: true
     },
     redirect: '/home',
     children: [
@@ -24,6 +25,7 @@ const routes = [
     component: () => import('../views/CourseView.vue'),
     meta: {
       requireAuth: true,
+      showTab: true
     }
   },
   {
@@ -32,6 +34,7 @@ const routes = [
     component: () => import('../views/MyView.vue'),
     meta: {
       requireAuth: true,
+      showTab: true
     }
   },
   {
@@ -40,6 +43,7 @@ const routes = [
     component: () => import('../views/RecordView.vue'),
     meta: {
       requireAuth: true,
+      showTab: false
     }
   },
   {
