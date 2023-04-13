@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,17 @@ public class RecordController {
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
         result.setData("语音上传成功");
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/getVoice")
+    public Result getVoice(@RequestParam("userId") String userId, @RequestParam("sentenceId") String sentenceId) throws IOException {
+        Result<String> result = new Result<>();
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getVoice(userId, sentenceId));
 
         return result;
     }

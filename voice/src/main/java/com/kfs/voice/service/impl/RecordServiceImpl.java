@@ -14,10 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -53,9 +52,9 @@ public class RecordServiceImpl implements RecordService {
         sentenceQueryWrapper.eq("word_id", wordId);
         List<Sentence> sentences = sentenceMapper.selectList(sentenceQueryWrapper);
 
-        QueryWrapper<Record> recordQueryWrapper=new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id",userId)
-                .eq("word_id",wordId);
+        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
+        recordQueryWrapper.eq("user_id", userId)
+                .eq("word_id", wordId);
         List<Record> records = recordMapper.selectList(recordQueryWrapper);
 
         List<SentenceVo> sentenceVos = new ArrayList<>();
@@ -122,6 +121,42 @@ public class RecordServiceImpl implements RecordService {
         } finally {
             try {
                 fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void checkFileExists(File file) throws FileNotFoundException {
+        if (file == null || !file.exists()) {
+            throw new FileNotFoundException(file.getName());
+        }
+    }
+
+    @Override
+    public String getVoice(String userId, String sentenceId) throws IOException {
+        String voiceName = sentenceId + "_" + userId + ".wav";
+        String voiceFilePath = voicePath + voiceName;
+
+        File file = new File(voiceFilePath);
+        checkFileExists(file);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream((int) file.length());
+        BufferedInputStream bin = null;
+
+        try {
+            bin = new BufferedInputStream(new FileInputStream(file));
+            byte[] buffer = new byte[1024];
+
+            while (bin.read(buffer) > 0) {
+                bos.write(buffer);
+            }
+
+            return Base64.getEncoder().encodeToString(bos.toByteArray());
+        } finally {
+            try {
+                bin.close();
+                bos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

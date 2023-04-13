@@ -113,7 +113,7 @@ export default {
       console.log("结束录音>>>", recordResult);
 
       let formData = {
-        userId: sessionStorage.getItem('userId'),
+        userId: sessionStorage.getItem("userId"),
         sentenceId: that.sentence.id,
         wordId: that.sentence.wordId,
         voiceFile: recordResult.get("WAVBlob"),
@@ -133,7 +133,24 @@ export default {
       that.isRecording = false;
     },
     playRecorder() {
-      this.recorder.play();
+      let that = this;
+
+      let formData = {
+        userId: sessionStorage.getItem("userId"),
+        sentenceId: that.sentence.id,
+      };
+
+      let config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+
+      that.$http.post("/record/getVoice", formData, config).then((response) => {
+        let dataTemp = response.data.data;
+        let readAudio = new Audio(`data:audio/x-wav;base64, ` + dataTemp);
+        readAudio.play();
+      });
     },
     triggerIsShowEvalOverlay(isShowEvalOverlay) {
       let that = this;
