@@ -34,11 +34,10 @@ public class UserServiceImpl implements UserService {
 
         String token = JwtUtil.createToken(selectUser);
 
-        return new HashMap<>() {
-            {
-                put("user", selectUser);
-                put("token", token);
-            }
-        };
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("user", selectUser);
+        resultMap.put("token", token);
+
+        return resultMap;
     }
 }
