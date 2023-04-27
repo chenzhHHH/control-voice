@@ -30,15 +30,6 @@ mybatis-plus:
     call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-xunfei:
-  iseHostUrl: https://ise-api.xfyun.cn/v2/open-ise
-  tssHostUrl: https://tts-api.xfyun.cn/v2/tts
-  appid: 4b26caaf
-  apiSecret: OTM0ZWJlYTI3ZDllYzcyNmVlNDgyZTlj
-  apiKey: 9b21822bb9f302913f49314e680cb906
-  tte: UTF8
-  vcn: xiaoyan
-
 jwt:
   header: "Authorization"
   tokenPrefix: "Bearer "
