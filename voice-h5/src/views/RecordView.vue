@@ -70,7 +70,7 @@ export default {
       that.updateIsShowOverlay({ isShowOverlay: true, showOverlayText: "数据获取中" });
 
       let formData = {
-        userId: sessionStorage.getItem("userId"),
+        userId: localStorage.getItem("userId"),
         wordId: wordId,
         filterType: that.filterType,
       };
@@ -90,7 +90,7 @@ export default {
       let that = this;
 
       let formData = {
-        userId: sessionStorage.getItem("userId"),
+        userId: localStorage.getItem("userId"),
         wordId: wordId,
       };
 

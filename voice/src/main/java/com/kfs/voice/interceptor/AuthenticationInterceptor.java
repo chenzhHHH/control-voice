@@ -1,5 +1,8 @@
 package com.kfs.voice.interceptor;
 
+import com.kfs.voice.enums.ResultEnum;
+import com.kfs.voice.exception.AuthHandlerException;
+import com.kfs.voice.utils.JwtUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,16 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String token = request.getHeader(JwtUtil.USER_LOGIN_TOKEN);
-//        if (token == null || token.equals("")) {
-//            throw new RuntimeException("请先登录");
-//        }
-//
-//        String sub = JwtUtil.validateToken(token);
-//        if (sub == null || sub.equals("")) {
-//            throw new RuntimeException("token验证失败");
-//        }
-//
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
+
+        String token = request.getHeader(JwtUtil.USER_LOGIN_TOKEN);
+
+        if (token == null || token.equals("")) {
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_NOT_MATCH);
+        }
+
+        boolean isValid = JwtUtil.validateToken(token);
+        if (!isValid) {
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_VERIFY_FAILURE);
+        }
+
+
 //        if (JwtUtil.isNeedUpdate(token)) {
 //            String newToken = JwtUtil.createToken(sub);
 //            response.setHeader(JwtUtil.USER_LOGIN_TOKEN, newToken);

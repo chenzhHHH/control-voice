@@ -40,9 +40,8 @@ export default {
       that.$http.post("/user/login", formData, config).then((response) => {
         let data = response.data.data;
 
-        sessionStorage.setItem("userId", data.id);
-        sessionStorage.setItem("username", data.username);
-        sessionStorage.setItem("phone", data.phone);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.id);
 
         that.$notify({ type: "success", message: "登陆成功" });
 

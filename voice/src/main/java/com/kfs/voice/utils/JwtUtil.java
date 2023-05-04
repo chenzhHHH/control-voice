@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.kfs.voice.entity.User;
+import com.kfs.voice.enums.ResultEnum;
+import com.kfs.voice.exception.AuthHandlerException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,7 @@ public class JwtUtil {
 
     public static long expireTime;
 
-    public static final String USER_LOGIN_TOKEN = "USER_LOGIN_TOKEN";
+    public static final String USER_LOGIN_TOKEN = "Authorization";
 
     public void setHeader(String header) {
         JwtUtil.header = header;
@@ -40,24 +42,38 @@ public class JwtUtil {
     }
 
     public static String createToken(User user) {
-        return tokenPrefix + JWT.create()
+        return JWT.create()
                 .withSubject(user.getPhone())
                 .withClaim("userId", user.getId())
                 .withClaim("username", user.getUsername())
                 .withClaim("phone", user.getPhone())
-                .withExpiresAt(new Date(System.currentTimeMillis() + expireTime))
+                .withExpiresAt(new Date(System.currentTimeMillis() + expireTime * 1000L * 60))
                 .sign(Algorithm.HMAC512(secret));
     }
 
-    public static User validateToken(String token) {
+    public static boolean validateToken(String token) {
         try {
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(token.replace(tokenPrefix, ""));
 
-            if("".equals(decodedJWT.getClaim("username").asString())){
-                return null;
+            if ("".equals(decodedJWT.getSubject())) {
+                return false;
             }
+
+            return true;
+        } catch (TokenExpiredException e) {
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_EXPIRE);
+        } catch (Exception e) {
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_VERIFY_FAILURE);
+        }
+    }
+
+    public static User parseTokenToUser(String token) {
+        try {
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(secret))
+                    .build()
+                    .verify(token.replace(tokenPrefix, ""));
 
             User user = new User();
             user.setId(decodedJWT.getClaim("userId").asString());
@@ -66,9 +82,9 @@ public class JwtUtil {
 
             return user;
         } catch (TokenExpiredException e) {
-            throw new RuntimeException("token已经过期");
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_EXPIRE);
         } catch (Exception e) {
-            throw new RuntimeException("token验证失败");
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_VERIFY_FAILURE);
         }
     }
 
@@ -82,7 +98,7 @@ public class JwtUtil {
         } catch (TokenExpiredException e) {
             return true;
         } catch (Exception e) {
-            throw new RuntimeException("token验证失败");
+            throw new AuthHandlerException(ResultEnum.UNAUTHORIZED_TOKEN_VERIFY_FAILURE);
         }
 
         return (expiresAt.getTime() - System.currentTimeMillis()) < (expireTime >> 1);

@@ -120,7 +120,7 @@ export default {
       // console.log("结束录音>>>", recordResult);
 
       let formData = {
-        userId: sessionStorage.getItem("userId"),
+        userId: localStorage.getItem("userId"),
         sentenceId: that.sentence.id,
         wordId: that.sentence.wordId,
         voiceFile: recordResult.get("WAVBlob"),
@@ -146,7 +146,7 @@ export default {
       that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "回听音频" });
 
       let formData = {
-        userId: sessionStorage.getItem("userId"),
+        userId: localStorage.getItem("userId"),
         sentenceId: that.sentence.id,
       };
 

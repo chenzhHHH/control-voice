@@ -55,7 +55,7 @@ export default {
       let that = this;
 
       let formData = {
-        userId: sessionStorage.getItem("userId"),
+        userId: localStorage.getItem("userId"),
       };
 
       let config = {

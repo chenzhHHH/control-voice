@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     logout() {
-      sessionStorage.clear();
+      localStorage.clear();
       this.$router.replace("/home");
     },
   },

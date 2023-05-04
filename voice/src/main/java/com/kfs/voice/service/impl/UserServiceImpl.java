@@ -2,14 +2,14 @@ package com.kfs.voice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kfs.voice.entity.User;
+import com.kfs.voice.enums.ResultEnum;
+import com.kfs.voice.exception.CommonHandlerException;
 import com.kfs.voice.mapper.UserMapper;
 import com.kfs.voice.service.UserService;
 import com.kfs.voice.utils.JwtUtil;
+import com.kfs.voice.vo.LoginUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,9 +18,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public Map<String, Object> login(User user) {
+    public LoginUserVo login(User user) {
         if ((user.getUsername() == null || user.getUsername().equals("")) || (user.getPhone() == null || user.getPhone().equals(""))) {
-            throw new RuntimeException("用户名手机不能为空");
+            throw new CommonHandlerException(ResultEnum.INTERNAL_SERVER_ERROR.getCode(), "用户名手机不能为空");
         }
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
@@ -29,15 +29,16 @@ public class UserServiceImpl implements UserService {
 
         User selectUser = userMapper.selectOne(userQueryWrapper);
         if (selectUser == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CommonHandlerException(ResultEnum.INTERNAL_SERVER_ERROR.getCode(), "用户不存在");
         }
 
-        String token = JwtUtil.createToken(selectUser);
+        LoginUserVo loginUserVo = new LoginUserVo();
+        loginUserVo.setId(selectUser.getId());
+        loginUserVo.setUsername(selectUser.getUsername());
+        loginUserVo.setPhone(selectUser.getPhone());
+        loginUserVo.setCnName(selectUser.getCnName());
+        loginUserVo.setToken(JwtUtil.createToken(selectUser));
 
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("user", selectUser);
-        resultMap.put("token", token);
-
-        return resultMap;
+        return loginUserVo;
     }
 }
