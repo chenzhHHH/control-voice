@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class RecordServiceImpl implements RecordService {
@@ -110,6 +112,13 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Boolean recordVoice(String userId, String sentenceId, String wordId, MultipartFile voiceFile) {
+        Pattern pattern = Pattern.compile("[\\s\\\\/:\\*\\?\\\".<>\\|]");
+        Matcher userIdMatcher = pattern.matcher(userId);
+        userId = userIdMatcher.replaceAll("");
+
+        Matcher sentenceIdMatcher = pattern.matcher(sentenceId);
+        sentenceId = sentenceIdMatcher.replaceAll("");
+
         String voiceName = sentenceId + "_" + userId + ".wav";
         String voiceFilePath = voicePath + voiceName;
 

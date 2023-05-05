@@ -1,5 +1,6 @@
 package com.kfs.voice.exception;
 
+import com.kfs.voice.enums.ResultEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,12 @@ public class CommonHandlerException extends RuntimeException {
 
     private String code;
     private String msg;
+
+    public CommonHandlerException(ResultEnum resultEnum) {
+        super(resultEnum.getCode());
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
+    }
 
     public CommonHandlerException(String code, String msg) {
         super(code);
