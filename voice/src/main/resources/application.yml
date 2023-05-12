@@ -6,6 +6,10 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/voice_temp?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: root
+#    url: jdbc:mysql://xxx:3306/voice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+#    username: root
+#    password: xxx
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       enabled: true
@@ -38,3 +42,4 @@ jwt:
 
 voice:
   path: /Users/chenzhihang/Documents/upload/
+#  path: D:\\upload\\
