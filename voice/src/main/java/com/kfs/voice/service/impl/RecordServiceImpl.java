@@ -319,7 +319,9 @@ public class RecordServiceImpl implements RecordService {
             List<Record> records = recordMapper.selectList(recordQueryWrapper);
 
             List<String> recordIds = records.stream().map(Record::getId).collect(Collectors.toList());
-            int deleteIndex = recordMapper.deleteBatchIds(recordIds);
+            if (!recordIds.isEmpty()) {
+                int deleteIndex = recordMapper.deleteBatchIds(recordIds);
+            }
 
             List<String> recordVoiceFilePaths = records.stream().map(Record::getVoiceFilePath).collect(Collectors.toList());
             recordVoiceFilePaths.forEach(recordVoiceFilePath -> {

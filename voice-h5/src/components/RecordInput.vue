@@ -1,7 +1,11 @@
 <template>
   <div class="record-container" :style="changeContainerColor">
     <div class="content-box">
-      <span :ref="sentence.id" class="sentence">{{ sentence.sentence }}</span>
+      <span class="sentence" v-show="!isEdit">{{ sentence.sentence }}</span>
+
+      <van-cell-group inset>
+        <van-field v-model="editContent" rows="1" autosize type="textarea" v-show="isEdit" />
+      </van-cell-group>
     </div>
 
     <div class="control-box">
@@ -39,6 +43,7 @@ export default {
       isRecording: false,
       isExistVoice: false,
       isEdit: false,
+      editContent: "",
     };
   },
   props: {
@@ -181,7 +186,7 @@ export default {
     editSentence() {
       let that = this;
 
-      that.$refs[that.sentence.id].setAttribute("contenteditable", "true");
+      that.editContent = that.sentence.sentence;
       that.isEdit = true;
     },
     confirmEdit() {
@@ -192,13 +197,11 @@ export default {
         message: "如果修改该句子，原有的对应该句子的管制员录音记录将清空。",
       })
         .then(() => {
-          that.$refs[that.sentence.id].setAttribute("contenteditable", "false");
-          that.sentence.sentence = that.$refs[that.sentence.id].textContent;
           that.isEdit = false;
 
           let formData = {
             sentenceId: that.sentence.id,
-            sentenceText: that.sentence.sentence,
+            sentenceText: that.editContent,
           };
 
           let config = {
@@ -209,6 +212,7 @@ export default {
 
           that.$http.post("/record/editSentence", formData, config).then((response) => {
             if (response.data.code === "2000") {
+              that.editContent = "";
               that.$notify({ type: "success", message: "修改成功" });
               that.triggerRefreshSentenceData();
             } else {
@@ -221,9 +225,8 @@ export default {
     cancelEdit() {
       let that = this;
 
-      that.$refs[that.sentence.id].setAttribute("contenteditable", "false");
-      that.$refs[that.sentence.id].textContent = that.sentence.sentence;
       that.isEdit = false;
+      that.editContent = "";
     },
     triggerUpdateIsShowOverlay(obj) {
       this.$emit("triggerUpdateIsShowOverlay", obj);
@@ -244,9 +247,14 @@ export default {
   padding: 1.5rem 0 1.5rem 0;
   margin-bottom: 1rem;
   .content-box {
-    width: 20rem;
+    width: 80%;
     .sentence {
       font-size: 1rem;
+    }
+    .sentence-textarea {
+      font-size: 1rem;
+      width: 100%;
+      height: auto;
     }
   }
 
