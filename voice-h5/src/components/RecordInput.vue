@@ -115,7 +115,8 @@ export default {
     },
     startRecorder() {
       let that = this;
-      // console.log("开始录音>>>");
+      
+      that.$notify({ type: "success", message: "开始录音" });
 
       that.recorder.start().then(
         () => {},
@@ -134,7 +135,8 @@ export default {
       that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "语音提交中" });
 
       let recordResult = that.getRecorder();
-      // console.log("结束录音>>>", recordResult);
+      
+      that.$notify({ type: "danger", message: "停止录音" });
 
       let formData = {
         userId: localStorage.getItem("userId"),
@@ -160,7 +162,7 @@ export default {
     playRecorder() {
       let that = this;
 
-      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "回听音频" });
+      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "正在播放", icon: "volume" });
 
       let formData = {
         userId: localStorage.getItem("userId"),
@@ -174,12 +176,14 @@ export default {
       };
 
       that.$http.post("/record/getVoice", formData, config).then((response) => {
+        that.$notify({ type: "success", message: "音频获取成功" });
+
         let dataTemp = response.data.data;
         let readAudio = new Audio(`data:audio/x-wav;base64, ` + dataTemp);
         readAudio.play();
 
         readAudio.onended = () => {
-          that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "回听音频" });
+          that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "正在播放", icon: "volume" });
         };
       });
     },

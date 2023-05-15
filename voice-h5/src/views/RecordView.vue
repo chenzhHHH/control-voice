@@ -17,10 +17,13 @@
     <RecordInput v-for="(item, index) in sentenceList" :key="index" :sentence="item" @triggerUpdateIsShowOverlay="updateIsShowOverlay" @triggerRefreshSentenceData="refreshSentenceData"></RecordInput>
   </div>
 
-  <van-overlay :show="isShowOverlay" z-index="2">
+  <van-overlay :show="overlay.isShowOverlay" z-index="2">
     <div class="overlay-wrapper">
       <div class="overlay-block">
-        <van-loading size="2rem" color="#85929E">{{ showOverlayText }}</van-loading>
+        <van-icon size="2rem" color="#85929E" name="volume-o" v-if="overlay.icon === 'volume'" />
+        <van-loading size="2rem" color="#85929E" v-else />
+
+        <span class="overlay-text">{{ overlay.showOverlayText }}</span>
       </div>
     </div>
   </van-overlay>
@@ -38,8 +41,11 @@ export default {
   },
   data() {
     return {
-      isShowOverlay: false,
-      showOverlayText: "",
+      overlay: {
+        isShowOverlay: false,
+        showOverlayText: "",
+        icon: "",
+      },
       sentenceList: [],
       filterType: "",
       sentenceNum: {
@@ -114,8 +120,9 @@ export default {
     updateIsShowOverlay(obj) {
       let that = this;
 
-      that.isShowOverlay = obj.isShowOverlay;
-      that.showOverlayText = obj.showOverlayText;
+      that.overlay.isShowOverlay = obj.isShowOverlay;
+      that.overlay.showOverlayText = obj.showOverlayText;
+      that.overlay.icon = obj.icon;
     },
     refreshSentenceData() {
       let that = this;
@@ -179,6 +186,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .overlay-text {
+      color: #85929e;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+    }
   }
 }
 </style>
