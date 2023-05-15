@@ -50,9 +50,7 @@ export default {
     };
   },
   created() {
-    this.initSentenceData(this.$route.params.wordId);
-
-    this.initSentenceNum(this.$route.params.wordId);
+    this.initData();
   },
   computed: {
     changeFilterBtStyle() {
@@ -104,6 +102,12 @@ export default {
         that.sentenceNum = response.data.data;
       });
     },
+    initData() {
+      let that = this;
+
+      that.initSentenceData(this.$route.params.wordId);
+      that.initSentenceNum(this.$route.params.wordId);
+    },
     goBack() {
       this.$router.replace("/course");
     },
@@ -116,16 +120,14 @@ export default {
     refreshSentenceData() {
       let that = this;
 
-      that.initSentenceData(this.$route.params.wordId);
-      that.initSentenceNum(this.$route.params.wordId);
+      that.initData();
     },
     filterSentence(filterType) {
       let that = this;
 
       that.filterType = filterType;
 
-      that.initSentenceData(this.$route.params.wordId);
-      that.initSentenceNum(this.$route.params.wordId);
+      that.initData();
     },
   },
 };
@@ -138,6 +140,9 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
+  background-color: #f8f8f8;
+  height: 11rem;
   .back_icon {
     margin: 1rem;
   }

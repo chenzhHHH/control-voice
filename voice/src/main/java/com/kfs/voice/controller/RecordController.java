@@ -2,10 +2,7 @@ package com.kfs.voice.controller;
 
 import com.kfs.voice.enums.ResultEnum;
 import com.kfs.voice.service.impl.RecordServiceImpl;
-import com.kfs.voice.vo.Result;
-import com.kfs.voice.vo.SentenceNumVo;
-import com.kfs.voice.vo.SentenceVo;
-import com.kfs.voice.vo.WordVo;
+import com.kfs.voice.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,12 +19,24 @@ public class RecordController {
 
     @CrossOrigin
     @PostMapping("/getWordList")
-    public Result getWordList(@RequestParam("userId") String userId) {
+    public Result getWordList(@RequestParam("userId") String userId, @RequestParam("filterType") String filterType) {
         Result<List<WordVo>> result = new Result<>();
 
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
-        result.setData(recordService.getWordList(userId));
+        result.setData(recordService.getWordList(userId, filterType));
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/getWordNum")
+    public Result getWordNum(@RequestParam("userId") String userId) {
+        Result<WordNumVo> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getWordNum(userId));
 
         return result;
     }
@@ -76,6 +85,19 @@ public class RecordController {
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
         result.setData(recordService.getVoice(userId, sentenceId));
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/editSentence")
+    public Result editSentence(@RequestParam("sentenceId") String sentenceId, @RequestParam("sentenceText") String sentenceText) throws IOException {
+        Boolean isModify = recordService.editSentence(sentenceId, sentenceText);
+
+        Result<String> result = new Result<>();
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData("修改成功");
 
         return result;
     }

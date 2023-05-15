@@ -14,4 +14,5 @@ public class SentenceVo implements Serializable {
     private String wordId;
     private String sentence;
     private Boolean isRecord;
+    private Boolean isEdit;
 }

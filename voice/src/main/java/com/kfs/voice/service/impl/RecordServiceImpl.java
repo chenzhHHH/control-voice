@@ -3,13 +3,16 @@ package com.kfs.voice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kfs.voice.entity.Record;
 import com.kfs.voice.entity.Sentence;
+import com.kfs.voice.entity.User;
 import com.kfs.voice.entity.Word;
 import com.kfs.voice.mapper.RecordMapper;
 import com.kfs.voice.mapper.SentenceMapper;
+import com.kfs.voice.mapper.UserMapper;
 import com.kfs.voice.mapper.WordMapper;
 import com.kfs.voice.service.RecordService;
 import com.kfs.voice.vo.SentenceNumVo;
 import com.kfs.voice.vo.SentenceVo;
+import com.kfs.voice.vo.WordNumVo;
 import com.kfs.voice.vo.WordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +26,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class RecordServiceImpl implements RecordService {
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private WordMapper wordMapper;
@@ -44,7 +51,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<WordVo> getWordList(String userId) {
+    public List<WordVo> getWordList(String userId, String filterType) {
         List<WordVo> wordVos = new ArrayList<>();
 
         QueryWrapper<Word> wordQueryWrapper = new QueryWrapper<>();
@@ -70,6 +77,12 @@ public class RecordServiceImpl implements RecordService {
             wordVo.setFinishNum(finishSentenceNumByWordId);
             wordVo.setIsFinish((totalSentenceNumByWordId - finishSentenceNumByWordId) == 0);
 
+            if ("unFinish".equals(filterType) && wordVo.getIsFinish()) {
+                return;
+            } else if ("finish".equals(filterType) && !wordVo.getIsFinish()) {
+                return;
+            }
+
             wordVos.add(wordVo);
         });
 
@@ -78,6 +91,14 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<SentenceVo> getSentenceList(String userId, String wordId, String filterType) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("id", userId);
+        User user = userMapper.selectOne(userQueryWrapper);
+
+        if (user == null) {
+            return new ArrayList<>();
+        }
+
         QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
         sentenceQueryWrapper.eq("word_id", wordId)
                 .eq("is_delete", false);
@@ -102,6 +123,7 @@ public class RecordServiceImpl implements RecordService {
             sentenceVo.setId(sentence.getId());
             sentenceVo.setWordId(sentence.getWordId());
             sentenceVo.setSentence(sentence.getSentence());
+            sentenceVo.setIsEdit("edit".equals(user.getType()));
             sentenceVo.setIsRecord(isRecord);
 
             sentenceVos.add(sentenceVo);
@@ -227,5 +249,84 @@ public class RecordServiceImpl implements RecordService {
         sentenceNumVo.setUnFinishNum(sentences.size() - records.size());
 
         return sentenceNumVo;
+    }
+
+    @Override
+    public WordNumVo getWordNum(String userId) {
+        WordNumVo wordNumVo = new WordNumVo();
+
+        QueryWrapper<Word> wordQueryWrapper = new QueryWrapper<>();
+        wordQueryWrapper.eq("is_delete", false);
+        List<Word> words = wordMapper.selectList(wordQueryWrapper);
+
+
+        int finishNum = 0;
+
+        for (int i = 0; i < words.size(); i++) {
+            Word word = words.get(i);
+
+            QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
+            sentenceQueryWrapper.eq("word_id", word.getId());
+            int totalSentenceNumByWordId = Math.toIntExact(sentenceMapper.selectCount(sentenceQueryWrapper));
+
+            QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
+            recordQueryWrapper.eq("user_id", userId)
+                    .eq("word_id", word.getId());
+            int finishSentenceNumByWordId = Math.toIntExact(recordMapper.selectCount(recordQueryWrapper));
+
+            if (totalSentenceNumByWordId - finishSentenceNumByWordId == 0) {
+                finishNum++;
+            }
+        }
+
+        wordNumVo.setSumNum(words.size());
+        wordNumVo.setFinishNum(finishNum);
+        wordNumVo.setUnFinishNum(words.size() - finishNum);
+
+        return wordNumVo;
+    }
+
+    private boolean deleteVoiceFile(String voiceFilePath) {
+        File file = new File(voiceFilePath);
+        if (!file.exists()) {
+            return false;
+        } else {
+            if (file.isFile()) {
+                file.delete();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean editSentence(String sentenceId, String sentenceText) {
+        QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
+        sentenceQueryWrapper.eq("id", sentenceId);
+
+        Sentence sentence = sentenceMapper.selectOne(sentenceQueryWrapper);
+        if (sentence == null) {
+            return false;
+        }
+
+        sentence.setSentence(sentenceText);
+        int updateIndex = sentenceMapper.updateById(sentence);
+
+        if (updateIndex > 0) {
+            QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
+            recordQueryWrapper.eq("sentence_id", sentence.getId());
+            List<Record> records = recordMapper.selectList(recordQueryWrapper);
+
+            List<String> recordIds = records.stream().map(Record::getId).collect(Collectors.toList());
+            int deleteIndex = recordMapper.deleteBatchIds(recordIds);
+
+            List<String> recordVoiceFilePaths = records.stream().map(Record::getVoiceFilePath).collect(Collectors.toList());
+            recordVoiceFilePaths.forEach(recordVoiceFilePath -> {
+                boolean isDelete = deleteVoiceFile(recordVoiceFilePath);
+            });
+        }
+
+        return true;
     }
 }

@@ -24,5 +24,6 @@ public class User implements Serializable {
     private String phone;
     private String cnName;
     private String password;
+    private String type;
     private Boolean isDelete;
 }

@@ -1,32 +1,44 @@
 <template>
-  <div class="record_container" :style="changeContainerColor">
-    <div class="content_box">
-      <span class="sentence">{{ sentence.sentence }}</span>
+  <div class="record-container" :style="changeContainerColor">
+    <div class="content-box">
+      <span :ref="sentence.id" class="sentence">{{ sentence.sentence }}</span>
     </div>
 
-    <div class="control_box">
-      <van-button class="control_bt" round type="success" size="small" @click="startRecorder()" v-show="!isRecording">开始录音</van-button>
+    <div class="control-box">
+      <div class="record-control-box" v-show="!isEdit">
+        <van-button class="record-control-bt" round type="success" size="small" @click="startRecorder()" v-show="!isRecording">开始录音</van-button>
 
-      <van-button class="control_bt" round type="danger" size="small" @click="stopRecorder()" v-show="isRecording">停止录音</van-button>
+        <van-button class="record-control-bt" round type="danger" size="small" @click="stopRecorder()" v-show="isRecording">停止录音</van-button>
 
-      <van-button class="control_bt" round type="primary" :disabled="!isExistVoice" size="small" @click="playRecorder()">回听音频</van-button>
+        <van-button class="record-control-bt" round type="primary" :disabled="!isExistVoice" size="small" @click="playRecorder()">回听音频</van-button>
+      </div>
+
+      <div class="record-edit-box">
+        <van-button class="record-edit-bt" round type="default" size="small" @click="editSentence()" v-show="!isEdit && sentence.isEdit">修改句子</van-button>
+
+        <van-button class="record-edit-bt" round type="success" size="small" @click="confirmEdit()" v-show="isEdit">确定</van-button>
+
+        <van-button class="record-edit-bt" round type="danger" size="small" @click="cancelEdit()" v-show="isEdit">取消</van-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Recorder from "js-audio-recorder";
-import { Loading, Overlay } from "vant";
+import { Loading, Overlay, Dialog } from "vant";
 
 export default {
   components: {
     [Loading.name]: Loading,
     [Overlay.name]: Overlay,
+    [Dialog.name]: Dialog,
   },
   data() {
     return {
       isRecording: false,
       isExistVoice: false,
+      isEdit: false,
     };
   },
   props: {
@@ -166,6 +178,53 @@ export default {
         };
       });
     },
+    editSentence() {
+      let that = this;
+
+      that.$refs[that.sentence.id].setAttribute("contenteditable", "true");
+      that.isEdit = true;
+    },
+    confirmEdit() {
+      let that = this;
+
+      Dialog.confirm({
+        title: "修改",
+        message: "如果修改该句子，原有的对应该句子的管制员录音记录将清空。",
+      })
+        .then(() => {
+          that.$refs[that.sentence.id].setAttribute("contenteditable", "false");
+          that.sentence.sentence = that.$refs[that.sentence.id].textContent;
+          that.isEdit = false;
+
+          let formData = {
+            sentenceId: that.sentence.id,
+            sentenceText: that.sentence.sentence,
+          };
+
+          let config = {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          };
+
+          that.$http.post("/record/editSentence", formData, config).then((response) => {
+            if (response.data.code === "2000") {
+              that.$notify({ type: "success", message: "修改成功" });
+              that.triggerRefreshSentenceData();
+            } else {
+              that.$notify({ type: "warning", message: response.data.msg });
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    cancelEdit() {
+      let that = this;
+
+      that.$refs[that.sentence.id].setAttribute("contenteditable", "false");
+      that.$refs[that.sentence.id].textContent = that.sentence.sentence;
+      that.isEdit = false;
+    },
     triggerUpdateIsShowOverlay(obj) {
       this.$emit("triggerUpdateIsShowOverlay", obj);
     },
@@ -177,29 +236,37 @@ export default {
 </script>
 
 <style scoped lang="less">
-.record_container {
+.record-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 0 1.5rem 0;
   margin-bottom: 1rem;
-  .content_box {
+  .content-box {
     width: 20rem;
     .sentence {
       font-size: 1rem;
     }
   }
 
-  .control_box {
+  .control-box {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     padding: 1rem 0 0 0;
-    .control_bt {
-      margin: 0 1rem 0 1rem;
-      font-size: 0.5rem;
+    .record-control-box {
+      .record-control-bt {
+        margin: 0 1rem 0 1rem;
+        font-size: 0.5rem;
+      }
+    }
+    .record-edit-box {
+      .record-edit-bt {
+        margin: 0 1rem 0 1rem;
+        font-size: 0.5rem;
+      }
     }
   }
 }

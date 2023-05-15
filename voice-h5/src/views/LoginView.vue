@@ -38,14 +38,18 @@ export default {
       };
 
       that.$http.post("/user/login", formData, config).then((response) => {
-        let data = response.data.data;
+        if (response.data.code === '2000') {
+          let data = response.data.data;
 
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.id);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.id);
 
-        that.$notify({ type: "success", message: "登陆成功" });
+          that.$notify({ type: "success", message: "登陆成功" });
 
-        this.$router.replace("/home");
+          this.$router.replace("/home");
+        } else {
+          that.$notify({ type: "warning", message: response.data.msg });
+        }
       });
     },
   },
