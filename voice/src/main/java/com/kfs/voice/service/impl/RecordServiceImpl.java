@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -135,14 +134,16 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Boolean recordVoice(String userId, String sentenceId, String wordId, MultipartFile voiceFile) {
         Pattern pattern = Pattern.compile("[\\s\\\\/:\\*\\?\\\".<>\\|]");
-        Matcher userIdMatcher = pattern.matcher(userId);
-        userId = userIdMatcher.replaceAll("");
 
-        Matcher sentenceIdMatcher = pattern.matcher(sentenceId);
-        sentenceId = sentenceIdMatcher.replaceAll("");
+        userId = pattern.matcher(userId).replaceAll("");
+
+        sentenceId = pattern.matcher(sentenceId).replaceAll("");
+
+        wordId = pattern.matcher(wordId).replaceAll("");
 
         String voiceName = sentenceId + "_" + userId + ".wav";
-        String voiceFilePath = voicePath + voiceName;
+        String voiceDirPath = voicePath + wordId + "\\" + sentenceId + "\\";
+        String voiceFilePath = voiceDirPath + voiceName;
 
         QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
         recordQueryWrapper.eq("user_id", userId)
@@ -162,23 +163,25 @@ public class RecordServiceImpl implements RecordService {
 
             int insert = recordMapper.insert(record);
         } else {
+            selectRecord.setVoiceName(voiceName);
+            selectRecord.setVoiceFilePath(voiceFilePath);
             selectRecord.setUpdateTime(new Date());
             int update = recordMapper.updateById(selectRecord);
         }
 
-        saveVoiceFile(voiceFile, voiceFilePath);
+        saveVoiceFile(voiceFile, voiceDirPath, voiceFilePath);
 
         return true;
     }
 
-    private void saveVoiceFile(MultipartFile voiceFile, String voiceFilePath) {
+    private void saveVoiceFile(MultipartFile voiceFile, String voiceDirPath, String voiceFilePath) {
         FileOutputStream fos = null;
 
         try {
-            File dir = new File(voicePath);
+            File dir = new File(voiceDirPath);
 
             if (!dir.exists()) {
-                dir.mkdir();
+                dir.mkdirs();
             }
 
             fos = new FileOutputStream(voiceFilePath);
@@ -202,8 +205,17 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public String getVoice(String userId, String sentenceId) throws IOException {
-        String voiceName = sentenceId + "_" + userId + ".wav";
-        String voiceFilePath = voicePath + voiceName;
+
+        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
+        recordQueryWrapper.eq("user_id", userId)
+                .eq("sentence_id", sentenceId);
+        Record record = recordMapper.selectOne(recordQueryWrapper);
+
+        if (record == null) {
+            return "";
+        }
+
+        String voiceFilePath = record.getVoiceFilePath();
 
         File file = new File(voiceFilePath);
         checkFileExists(file);
