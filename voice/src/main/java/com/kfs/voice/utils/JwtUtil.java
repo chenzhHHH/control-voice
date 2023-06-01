@@ -37,8 +37,8 @@ public class JwtUtil {
         JwtUtil.secret = secret;
     }
 
-    public void setExpireTime(int expireTimeInt) {
-        JwtUtil.expireTime = expireTimeInt * 1000L * 60;
+    public void setExpireTime(int expireTime) {
+        JwtUtil.expireTime = expireTime;
     }
 
     public static String createToken(User user) {

@@ -61,7 +61,7 @@ export default {
       isShowOverlay: false,
       showOverlayText: "",
       wordList: [],
-      filterType: "",
+      filterType: "unFinish",
       wordNum: {
         sumNum: 0,
         unFinishNum: 0,

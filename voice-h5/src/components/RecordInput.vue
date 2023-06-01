@@ -132,10 +132,10 @@ export default {
 
       that.recorder.stop();
 
-      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "语音提交中" });
+      that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "语音提交" });
 
       let recordResult = that.getRecorder();
-      
+
       that.$notify({ type: "danger", message: "停止录音" });
 
       let formData = {
@@ -153,7 +153,7 @@ export default {
 
       // eslint-disable-next-line
       that.$http.post("/record/recordVoice", formData, config).then((response) => {
-        that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "语音提交中" });
+        that.triggerUpdateIsShowOverlay({ isShowOverlay: false, showOverlayText: "语音提交" });
         that.triggerRefreshSentenceData();
       });
 

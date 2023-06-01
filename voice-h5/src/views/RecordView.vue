@@ -20,8 +20,8 @@
   <van-overlay :show="overlay.isShowOverlay" z-index="2">
     <div class="overlay-wrapper">
       <div class="overlay-block">
-        <van-icon size="2rem" color="#85929E" name="volume-o" v-if="overlay.icon === 'volume'" />
-        <van-loading size="2rem" color="#85929E" v-else />
+        <van-icon size="1rem" color="#85929E" name="volume-o" v-if="overlay.icon === 'volume'" />
+        <van-loading size="1rem" color="#85929E" v-else />
 
         <span class="overlay-text">{{ overlay.showOverlayText }}</span>
       </div>
@@ -71,7 +71,7 @@ export default {
     initSentenceData(wordId) {
       let that = this;
 
-      that.updateIsShowOverlay({ isShowOverlay: true, showOverlayText: "数据获取中" });
+      that.updateIsShowOverlay({ isShowOverlay: true, showOverlayText: "数据获取" });
 
       let formData = {
         userId: localStorage.getItem("userId"),
@@ -87,7 +87,7 @@ export default {
 
       that.$http.post("/record/getSentenceListByWordId", formData, config).then((response) => {
         that.sentenceList = response.data.data;
-        that.updateIsShowOverlay({ isShowOverlay: false, showOverlayText: "数据获取中" });
+        that.updateIsShowOverlay({ isShowOverlay: false, showOverlayText: "数据获取" });
       });
     },
     initSentenceNum(wordId) {
@@ -179,13 +179,14 @@ export default {
   justify-content: center;
   height: 100%;
   .overlay-block {
-    width: 8rem;
-    height: 8rem;
+    width: 6.5rem;
+    height: 6.5rem;
     border-radius: 2rem;
     background-color: #f2f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0.3;
 
     .overlay-text {
       color: #85929e;
