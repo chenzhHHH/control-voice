@@ -49,8 +49,44 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/LoginView.vue')
-  }
+    component: () => import('../views/LoginView.vue'),
+  },
+  {
+    path: '/chooseChecker',
+    name: 'chooseChecker',
+    component: () => import('../views/ChooseCheckerView.vue'),
+    meta: {
+      requireAuth: true,
+      showTab: false
+    }
+  },
+  {
+    path: '/checkUser',
+    name: 'checkUser',
+    component: () => import('../views/CheckUserView.vue'),
+    meta: {
+      requireAuth: true,
+      showTab: false
+    }
+  },
+  {
+    path: '/checkCourse/:userId',
+    name: 'checkCourse',
+    component: () => import('../views/CheckCourseView.vue'),
+    meta: {
+      requireAuth: true,
+      showTab: false
+    }
+  },
+  {
+    path: '/checkRecord/:userId/:wordId',
+    name: 'checkRecord',
+    component: () => import('../views/CheckRecordView.vue'),
+    meta: {
+      requireAuth: true,
+      showTab: false
+    }
+  },
 ]
 
 const router = createRouter({

@@ -166,6 +166,7 @@ public class RecordServiceImpl implements RecordService {
             selectRecord.setVoiceName(voiceName);
             selectRecord.setVoiceFilePath(voiceFilePath);
             selectRecord.setUpdateTime(new Date());
+
             int update = recordMapper.updateById(selectRecord);
         }
 

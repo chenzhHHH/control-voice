@@ -40,9 +40,10 @@ export default {
       that.$http.post("/user/login", formData, config).then((response) => {
         if (response.data.code === '2000') {
           let data = response.data.data;
-
+          
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.id);
+          localStorage.setItem("cnName", data.cnName);
 
           that.$notify({ type: "success", message: "登陆成功" });
 
