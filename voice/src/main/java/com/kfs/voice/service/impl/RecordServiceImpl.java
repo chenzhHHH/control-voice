@@ -11,6 +11,7 @@ import com.kfs.voice.mapper.UserMapper;
 import com.kfs.voice.mapper.WordMapper;
 import com.kfs.voice.service.RecordService;
 import com.kfs.voice.vo.*;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -361,5 +362,28 @@ public class RecordServiceImpl implements RecordService {
     public CheckWordNumVo getCheckWordNum(String userId) {
 
         return wordMapper.getCheckWordNum(userId);
+    }
+
+    @Override
+    public Boolean checkRecord(CheckRecordVo checkRecordVo) {
+        Record record = recordMapper.selectById(checkRecordVo.getRecordId());
+
+        if (record == null) {
+            return false;
+        }
+
+        String pass = Strings.EMPTY;
+
+        if ("合格".equals(checkRecordVo.getCheckType())) {
+            pass = "pass";
+        } else if ("不合格".equals(checkRecordVo.getCheckType())) {
+            pass = "failure";
+        }
+
+        record.setReviewUserId(checkRecordVo.getCheckUserId());
+        record.setReviewTime(new Date());
+        record.setPass(pass);
+
+        return true;
     }
 }

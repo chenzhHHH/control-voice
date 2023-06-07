@@ -25,4 +25,6 @@ public interface RecordService {
     List<CheckWordVo> getCheckWordList(String userId, String filterType);
 
     CheckWordNumVo getCheckWordNum(String userId);
+
+    Boolean checkRecord(CheckRecordVo checkRecordVo);
 }

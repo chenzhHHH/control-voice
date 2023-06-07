@@ -24,19 +24,28 @@
 
         <van-button class="record-edit-bt" round type="danger" size="small" @click="cancelEdit()" v-show="isEdit">取消</van-button>
       </div>
+
+      <div class="check_record_box">
+        <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkSelect">
+          <template #reference>
+            <van-button class="check_record_bt" round type="default" size="small">审核</van-button>
+          </template>
+        </van-popover>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Recorder from "js-audio-recorder";
-import { Loading, Overlay, Dialog } from "vant";
+import { Loading, Overlay, Dialog, Popover } from "vant";
 
 export default {
   components: {
     [Loading.name]: Loading,
     [Overlay.name]: Overlay,
     [Dialog.name]: Dialog,
+    [Popover.name]: Popover,
   },
   data() {
     return {
@@ -44,6 +53,11 @@ export default {
       isExistVoice: false,
       isEdit: false,
       editContent: "",
+      showCheckPopover: false,
+      checkActions: [
+        { text: "合格", icon: "passed" },
+        { text: "不合格", icon: "close" },
+      ],
     };
   },
   props: {
@@ -115,7 +129,7 @@ export default {
     },
     startRecorder() {
       let that = this;
-      
+
       that.$notify({ type: "success", message: "开始录音" });
 
       that.recorder.start().then(
@@ -238,6 +252,11 @@ export default {
     triggerRefreshSentenceData() {
       this.$emit("triggerRefreshSentenceData");
     },
+    checkSelect(action) {
+      // let that = this;
+
+      console.log(action.text)
+    }
   },
 };
 </script>
@@ -276,6 +295,13 @@ export default {
     }
     .record-edit-box {
       .record-edit-bt {
+        margin: 0 1rem 0 1rem;
+        font-size: 0.5rem;
+      }
+    }
+
+    .check_record_box {
+      .check_record_bt{
         margin: 0 1rem 0 1rem;
         font-size: 0.5rem;
       }

@@ -152,7 +152,7 @@ export default {
     goBack() {
       let that = this;
 
-      this.$router.replace("/checkUser");
+      that.$router.replace("/checkUser");
     },
   },
 };

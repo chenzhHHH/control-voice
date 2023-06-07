@@ -26,4 +26,5 @@ public class Record implements Serializable {
     private Date updateTime;
     private String reviewUserId;
     private Date reviewTime;
+    private String pass;
 }
