@@ -64,8 +64,8 @@ export default {
       filterType: "unFinish",
       wordNum: {
         totalNum: 0,
+        unFinishNum: 0,
         finishNum: 0,
-        totalNum: 0,
       },
     };
   },
