@@ -344,6 +344,22 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<CheckWordVo> getCheckWordList(String userId, String filterType) {
-        return wordMapper.getCheckWordList(userId);
+        QueryWrapper<Word> wrapper = new QueryWrapper<>();
+
+        if ("unFinish".equals(filterType)) {
+            wrapper.isNull("temp_word_record.finishCheckNum")
+                    .or()
+                    .apply("temp_word_record.finishCheckNum != temp_sentence.totalNum");
+        } else if ("finish".equals(filterType)) {
+            wrapper.apply("temp_word_record.finishCheckNum = temp_sentence.totalNum");
+        }
+
+        return wordMapper.getCheckWordList(userId, wrapper);
+    }
+
+    @Override
+    public CheckWordNumVo getCheckWordNum(String userId) {
+
+        return wordMapper.getCheckWordNum(userId);
     }
 }

@@ -23,4 +23,6 @@ public interface RecordService {
     Boolean editSentence(String sentenceId, String sentenceText);
 
     List<CheckWordVo> getCheckWordList(String userId, String filterType);
+
+    CheckWordNumVo getCheckWordNum(String userId);
 }

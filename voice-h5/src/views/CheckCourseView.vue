@@ -5,11 +5,11 @@
     <div class="title_box">特情词</div>
 
     <div class="filter_box">
-      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ wordNum.sumNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ checkWordNum.totalNum }})</van-button>
 
-      <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未审查({{ wordNum.unFinishNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未审查({{ checkWordNum.unFinishCheckNum }})</van-button>
 
-      <van-button class="filter_bt" :style="changeFilterBtStyle('finish')" round size="small" @click="filterSentence('finish')">已审查({{ wordNum.finishNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('finish')" round size="small" @click="filterSentence('finish')">已审查({{ checkWordNum.finishCheckNum }})</van-button>
     </div>
   </div>
 
@@ -64,17 +64,17 @@ export default {
       showOverlayText: "",
       wordList: [],
       filterType: "unFinish",
-      wordNum: {
-        sumNum: 0,
-        unFinishNum: 0,
-        finishNum: 0,
+      checkWordNum: {
+        totalNum: 0,
+        unFinishCheckNum: 0,
+        finishCheckNum: 0,
       },
     };
   },
   created() {
-    this.initWordData();
+    this.initCheckWordData();
 
-    this.initWordNum();
+    this.initCheckWordNum();
   },
   computed: {
     changeNumBoxColor() {
@@ -91,7 +91,7 @@ export default {
     },
   },
   methods: {
-    initWordData() {
+    initCheckWordData() {
       let that = this;
 
       that.updateIsShowOverlay({ isShowOverlay: true, showOverlayText: "数据获取中" });
@@ -112,7 +112,7 @@ export default {
         that.updateIsShowOverlay({ isShowOverlay: false, showOverlayText: "数据获取中" });
       });
     },
-    initWordNum() {
+    initCheckWordNum() {
       let that = this;
 
       let formData = {
@@ -125,8 +125,8 @@ export default {
         },
       };
 
-      that.$http.post("/record/getWordNum", formData, config).then((response) => {
-        that.wordNum = response.data.data;
+      that.$http.post("/record/getCheckWordNum", formData, config).then((response) => {
+        that.checkWordNum = response.data.data;
       });
     },
     updateIsShowOverlay(obj) {
@@ -145,9 +145,9 @@ export default {
 
       that.filterType = filterType;
 
-      that.initWordData();
+      that.initCheckWordData();
 
-      that.initWordNum();
+      that.initCheckWordNum();
     },
     goBack() {
       let that = this;

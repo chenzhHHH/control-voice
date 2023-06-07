@@ -113,4 +113,16 @@ public class RecordController {
 
         return result;
     }
+
+    @CrossOrigin
+    @PostMapping("/getCheckWordNum")
+    public Result getCheckWordNum(@RequestParam("userId") String userId) {
+        Result<CheckWordNumVo> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getCheckWordNum(userId));
+
+        return result;
+    }
 }
