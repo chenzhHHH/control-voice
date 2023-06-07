@@ -13,6 +13,6 @@ public class WordVo implements Serializable {
 
     private String word;
     private int finishNum;
-    private int unfinishNum;
+    private int totalNum;
     private Boolean isFinish;
 }

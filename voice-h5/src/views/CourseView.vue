@@ -3,7 +3,7 @@
     <div class="title_box">特情词</div>
 
     <div class="filter_box">
-      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ wordNum.sumNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ wordNum.totalNum }})</van-button>
 
       <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未完成({{ wordNum.unFinishNum }})</van-button>
 
@@ -26,7 +26,7 @@
 
         <van-col span="4" offset="3">
           <div class="num_box">
-            <span class="num">{{ item.finishNum }}/{{ item.unfinishNum + item.finishNum }}</span>
+            <span class="num">{{ item.finishNum }}/{{ item.totalNum }}</span>
           </div>
         </van-col>
 
@@ -63,9 +63,9 @@ export default {
       wordList: [],
       filterType: "unFinish",
       wordNum: {
-        sumNum: 0,
-        unFinishNum: 0,
+        totalNum: 0,
         finishNum: 0,
+        totalNum: 0,
       },
     };
   },

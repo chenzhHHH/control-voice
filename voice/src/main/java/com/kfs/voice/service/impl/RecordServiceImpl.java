@@ -49,41 +49,23 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<WordVo> getWordList(String userId, String filterType) {
-        List<WordVo> wordVos = new ArrayList<>();
+        QueryWrapper<Word> wrapper = new QueryWrapper<>();
 
-        QueryWrapper<Word> wordQueryWrapper = new QueryWrapper<>();
-        wordQueryWrapper.eq("is_delete", false);
-        List<Word> words = wordMapper.selectList(wordQueryWrapper);
+        if ("unFinish".equals(filterType)) {
+            wrapper.isNull("temp_word_record.finishNum")
+                    .or()
+                    .apply("temp_word_record.finishNum != temp_sentence.totalNum");
+        } else if ("finish".equals(filterType)) {
+            wrapper.apply("temp_word_record.finishNum = temp_sentence.totalNum");
+        }
 
-        words.forEach(word -> {
-            WordVo wordVo = new WordVo();
+        return wordMapper.getWordList(userId, wrapper);
+    }
 
-            wordVo.setId(word.getId());
-            wordVo.setWord(word.getWord());
+    @Override
+    public WordNumVo getWordNum(String userId) {
 
-            QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
-            sentenceQueryWrapper.eq("word_id", word.getId());
-            int totalSentenceNumByWordId = Math.toIntExact(sentenceMapper.selectCount(sentenceQueryWrapper));
-
-            QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-            recordQueryWrapper.eq("user_id", userId)
-                    .eq("word_id", word.getId());
-            int finishSentenceNumByWordId = Math.toIntExact(recordMapper.selectCount(recordQueryWrapper));
-
-            wordVo.setUnfinishNum(totalSentenceNumByWordId - finishSentenceNumByWordId);
-            wordVo.setFinishNum(finishSentenceNumByWordId);
-            wordVo.setIsFinish((totalSentenceNumByWordId - finishSentenceNumByWordId) == 0);
-
-            if ("unFinish".equals(filterType) && wordVo.getIsFinish()) {
-                return;
-            } else if ("finish".equals(filterType) && !wordVo.getIsFinish()) {
-                return;
-            }
-
-            wordVos.add(wordVo);
-        });
-
-        return wordVos;
+        return wordMapper.getWordNum(userId);
     }
 
     @Override
@@ -127,6 +109,27 @@ public class RecordServiceImpl implements RecordService {
         });
 
         return sentenceVos;
+    }
+
+    @Override
+    public SentenceNumVo getSentenceNum(String userId, String wordId) {
+        SentenceNumVo sentenceNumVo = new SentenceNumVo();
+
+        QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
+        sentenceQueryWrapper.eq("word_id", wordId)
+                .eq("is_delete", false);
+        List<Sentence> sentences = sentenceMapper.selectList(sentenceQueryWrapper);
+
+        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
+        recordQueryWrapper.eq("user_id", userId)
+                .eq("word_id", wordId);
+        List<Record> records = recordMapper.selectList(recordQueryWrapper);
+
+        sentenceNumVo.setSumNum(sentences.size());
+        sentenceNumVo.setFinishNum(records.size());
+        sentenceNumVo.setUnFinishNum(sentences.size() - records.size());
+
+        return sentenceNumVo;
     }
 
     @Override
@@ -239,62 +242,6 @@ public class RecordServiceImpl implements RecordService {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public SentenceNumVo getSentenceNum(String userId, String wordId) {
-        SentenceNumVo sentenceNumVo = new SentenceNumVo();
-
-        QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
-        sentenceQueryWrapper.eq("word_id", wordId)
-                .eq("is_delete", false);
-        List<Sentence> sentences = sentenceMapper.selectList(sentenceQueryWrapper);
-
-        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id", userId)
-                .eq("word_id", wordId);
-        List<Record> records = recordMapper.selectList(recordQueryWrapper);
-
-        sentenceNumVo.setSumNum(sentences.size());
-        sentenceNumVo.setFinishNum(records.size());
-        sentenceNumVo.setUnFinishNum(sentences.size() - records.size());
-
-        return sentenceNumVo;
-    }
-
-    @Override
-    public WordNumVo getWordNum(String userId) {
-        WordNumVo wordNumVo = new WordNumVo();
-
-        QueryWrapper<Word> wordQueryWrapper = new QueryWrapper<>();
-        wordQueryWrapper.eq("is_delete", false);
-        List<Word> words = wordMapper.selectList(wordQueryWrapper);
-
-
-        int finishNum = 0;
-
-        for (int i = 0; i < words.size(); i++) {
-            Word word = words.get(i);
-
-            QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
-            sentenceQueryWrapper.eq("word_id", word.getId());
-            int totalSentenceNumByWordId = Math.toIntExact(sentenceMapper.selectCount(sentenceQueryWrapper));
-
-            QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-            recordQueryWrapper.eq("user_id", userId)
-                    .eq("word_id", word.getId());
-            int finishSentenceNumByWordId = Math.toIntExact(recordMapper.selectCount(recordQueryWrapper));
-
-            if (totalSentenceNumByWordId - finishSentenceNumByWordId == 0) {
-                finishNum++;
-            }
-        }
-
-        wordNumVo.setSumNum(words.size());
-        wordNumVo.setFinishNum(finishNum);
-        wordNumVo.setUnFinishNum(words.size() - finishNum);
-
-        return wordNumVo;
     }
 
     private boolean deleteVoiceFile(String voiceFilePath) {
