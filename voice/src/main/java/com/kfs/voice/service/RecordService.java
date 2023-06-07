@@ -1,9 +1,6 @@
 package com.kfs.voice.service;
 
-import com.kfs.voice.vo.SentenceNumVo;
-import com.kfs.voice.vo.SentenceVo;
-import com.kfs.voice.vo.WordNumVo;
-import com.kfs.voice.vo.WordVo;
+import com.kfs.voice.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,4 +21,6 @@ public interface RecordService {
     WordNumVo getWordNum(String userId);
 
     Boolean editSentence(String sentenceId, String sentenceText);
+
+    List<CheckWordVo> getCheckWordList(String userId, String filterType);
 }

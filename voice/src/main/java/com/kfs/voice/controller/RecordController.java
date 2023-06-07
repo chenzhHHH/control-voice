@@ -101,4 +101,16 @@ public class RecordController {
 
         return result;
     }
+
+    @CrossOrigin
+    @PostMapping("/getCheckWordList")
+    public Result getCheckWordList(@RequestParam("userId") String userId, @RequestParam("filterType") String filterType) {
+        Result<List<CheckWordVo>> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getCheckWordList(userId, filterType));
+
+        return result;
+    }
 }

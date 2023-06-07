@@ -10,10 +10,7 @@ import com.kfs.voice.mapper.SentenceMapper;
 import com.kfs.voice.mapper.UserMapper;
 import com.kfs.voice.mapper.WordMapper;
 import com.kfs.voice.service.RecordService;
-import com.kfs.voice.vo.SentenceNumVo;
-import com.kfs.voice.vo.SentenceVo;
-import com.kfs.voice.vo.WordNumVo;
-import com.kfs.voice.vo.WordVo;
+import com.kfs.voice.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -343,5 +340,10 @@ public class RecordServiceImpl implements RecordService {
         }
 
         return true;
+    }
+
+    @Override
+    public List<CheckWordVo> getCheckWordList(String userId, String filterType) {
+        return wordMapper.getCheckWordList(userId);
     }
 }

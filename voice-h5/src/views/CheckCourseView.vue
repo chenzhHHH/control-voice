@@ -28,7 +28,7 @@
 
         <van-col span="4" offset="3">
           <div class="num_box">
-            <span class="num">{{ item.finishNum }}/{{ item.unfinishNum + item.finishNum }}</span>
+            <span class="num">{{ item.finishCheckNum }}/{{ item.totalNum }}</span>
           </div>
         </van-col>
 
@@ -79,7 +79,7 @@ export default {
   computed: {
     changeNumBoxColor() {
       return (item) => ({
-        backgroundColor: item.isFinish ? "#2ECC71" : "#95A5A6",
+        backgroundColor: item.finishCheckNum === item.totalNum ? "#2ECC71" : "#95A5A6",
       });
     },
     changeFilterBtStyle() {
@@ -107,7 +107,7 @@ export default {
         },
       };
 
-      that.$http.post("/record/getWordList", formData, config).then((response) => {
+      that.$http.post("/record/getCheckWordList", formData, config).then((response) => {
         that.wordList = response.data.data;
         that.updateIsShowOverlay({ isShowOverlay: false, showOverlayText: "数据获取中" });
       });
