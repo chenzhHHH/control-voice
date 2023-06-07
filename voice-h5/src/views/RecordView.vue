@@ -5,7 +5,7 @@
     <div class="title_box">句式</div>
 
     <div class="filter_box">
-      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.sumNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.totalNum }})</van-button>
 
       <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未完成({{ sentenceNum.unFinishNum }})</van-button>
 
@@ -49,7 +49,7 @@ export default {
       sentenceList: [],
       filterType: "",
       sentenceNum: {
-        sumNum: 0,
+        totalNum: 0,
         unFinishNum: 0,
         finishNum: 0,
       },

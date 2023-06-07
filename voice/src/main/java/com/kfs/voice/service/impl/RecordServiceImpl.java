@@ -3,7 +3,6 @@ package com.kfs.voice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kfs.voice.entity.Record;
 import com.kfs.voice.entity.Sentence;
-import com.kfs.voice.entity.User;
 import com.kfs.voice.entity.Word;
 import com.kfs.voice.mapper.RecordMapper;
 import com.kfs.voice.mapper.SentenceMapper;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -70,66 +68,23 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<SentenceVo> getSentenceList(String userId, String wordId, String filterType) {
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("id", userId);
-        User user = userMapper.selectOne(userQueryWrapper);
+        QueryWrapper<Sentence> wrapper = new QueryWrapper<>();
 
-        if (user == null) {
-            return new ArrayList<>();
+        wrapper.eq("s.word_id", wordId);
+
+        if ("unFinish".equals(filterType)) {
+            wrapper.isNull("r.id");
+        } else if ("finish".equals(filterType)) {
+            wrapper.isNotNull("r.id");
         }
 
-        QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
-        sentenceQueryWrapper.eq("word_id", wordId)
-                .eq("is_delete", false);
-        List<Sentence> sentences = sentenceMapper.selectList(sentenceQueryWrapper);
-
-        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id", userId)
-                .eq("word_id", wordId);
-        List<Record> records = recordMapper.selectList(recordQueryWrapper);
-
-        List<SentenceVo> sentenceVos = new ArrayList<>();
-        sentences.forEach(sentence -> {
-            boolean isRecord = records.stream().anyMatch(record -> record.getSentenceId().equals(sentence.getId()));
-
-            if ("unFinish".equals(filterType) && isRecord) {
-                return;
-            } else if ("finish".equals(filterType) && !isRecord) {
-                return;
-            }
-
-            SentenceVo sentenceVo = new SentenceVo();
-            sentenceVo.setId(sentence.getId());
-            sentenceVo.setWordId(sentence.getWordId());
-            sentenceVo.setSentence(sentence.getSentence());
-            sentenceVo.setIsEdit("edit".equals(user.getType()));
-            sentenceVo.setIsRecord(isRecord);
-
-            sentenceVos.add(sentenceVo);
-        });
-
-        return sentenceVos;
+        return sentenceMapper.getSentenceList(userId, wrapper);
     }
 
     @Override
     public SentenceNumVo getSentenceNum(String userId, String wordId) {
-        SentenceNumVo sentenceNumVo = new SentenceNumVo();
 
-        QueryWrapper<Sentence> sentenceQueryWrapper = new QueryWrapper<>();
-        sentenceQueryWrapper.eq("word_id", wordId)
-                .eq("is_delete", false);
-        List<Sentence> sentences = sentenceMapper.selectList(sentenceQueryWrapper);
-
-        QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id", userId)
-                .eq("word_id", wordId);
-        List<Record> records = recordMapper.selectList(recordQueryWrapper);
-
-        sentenceNumVo.setSumNum(sentences.size());
-        sentenceNumVo.setFinishNum(records.size());
-        sentenceNumVo.setUnFinishNum(sentences.size() - records.size());
-
-        return sentenceNumVo;
+        return sentenceMapper.getSentenceNum(userId, wordId);
     }
 
     @Override

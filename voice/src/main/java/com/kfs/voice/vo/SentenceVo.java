@@ -11,6 +11,7 @@ public class SentenceVo implements Serializable {
 
     private String id;
 
+    private String recordId;
     private String wordId;
     private String sentence;
     private Boolean isRecord;

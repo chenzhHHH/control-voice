@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.kfs.voice.entity.Word;
-import com.kfs.voice.vo.CheckWordNumVo;
-import com.kfs.voice.vo.CheckWordVo;
-import com.kfs.voice.vo.WordNumVo;
-import com.kfs.voice.vo.WordVo;
+import com.kfs.voice.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -41,7 +38,8 @@ public interface WordMapper extends BaseMapper<Word> {
             "JOIN (" +
             "SELECT t_s.word_id, count(*) AS totalNum FROM sentence t_s GROUP BY t_s.word_id " +
             ") temp_sentence ON w.id = temp_sentence.word_id " +
-            "WHERE temp_word_record.finishNum = temp_sentence.totalNum")
+            "WHERE temp_word_record.finishNum = temp_sentence.totalNum"
+    )
     WordNumVo getWordNum(String userId);
 
     @Select("SELECT w.id, w.word, temp_word_record.user_id AS userId, temp_word_record.finishCheckNum, temp_sentence.totalNum FROM word w " +

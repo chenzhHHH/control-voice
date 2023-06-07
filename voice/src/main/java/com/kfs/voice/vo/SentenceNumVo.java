@@ -9,7 +9,7 @@ public class SentenceNumVo implements Serializable {
 
     private static final long serialVersionUID = 3922571446457865731L;
 
-    private int sumNum;
+    private int totalNum;
     private int unFinishNum;
     private int finishNum;
 }
