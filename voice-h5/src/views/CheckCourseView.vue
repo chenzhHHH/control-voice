@@ -2,7 +2,7 @@
   <div class="header">
     <van-icon name="arrow-left" size="20px" class="back_icon" @click="goBack()" />
 
-    <div class="title_box">特情词</div>
+    <div class="title_box">审核特情词</div>
 
     <div class="filter_box">
       <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ checkWordNum.totalNum }})</van-button>
@@ -15,7 +15,7 @@
 
   <div class="container">
     <div class="course_box" v-for="(item, index) in wordList" :key="index" :value="item">
-      <van-row @click="goToLearnWord(item)">
+      <van-row @click="goToCheckWord(item)">
         <van-col span="4">
           <div class="index_box" :style="changeNumBoxColor(item)">{{ index + 1 }}</div>
         </van-col>
@@ -135,7 +135,7 @@ export default {
       that.isShowOverlay = obj.isShowOverlay;
       that.showOverlayText = obj.showOverlayText;
     },
-    goToLearnWord(item) {
+    goToCheckWord(item) {
       let that = this;
 
       that.$router.replace("/checkRecord/" + that.$route.params.userId + "/" + item.id);
@@ -152,7 +152,7 @@ export default {
     goBack() {
       let that = this;
 
-      that.$router.replace("/checkCourse/" + that.$route.params.userId);
+      this.$router.replace("/checkUser");
     },
   },
 };

@@ -2,7 +2,7 @@
   <div class="header">
     <van-icon name="arrow-left" size="20px" class="back_icon" @click="goBack()" />
 
-    <div class="title_box">句式</div>
+    <div class="title_box">审核句式</div>
 
     <div class="filter_box">
       <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.sumNum }})</van-button>
