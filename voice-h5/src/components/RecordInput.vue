@@ -28,7 +28,7 @@
       <div class="check_record_box" v-show="!isEdit && isCheckShow && sentence.isRecord">
         <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkSelect">
           <template #reference>
-            <van-button class="check_record_bt" round type="default" size="small">审核</van-button>
+            <van-button class="check_record_bt" round type="default" size="small"> 审核{{ sentence.pass == "pass" ? "(合格)" : sentence.pass == "failure" ? "(不合格)" : "" }} </van-button>
           </template>
         </van-popover>
       </div>
@@ -81,6 +81,10 @@ export default {
   computed: {
     changeContainerColor() {
       let that = this;
+
+      if (that.sentence.pass === "failure") {
+          return "background-color: #F0B27A";
+        }
 
       if (that.isCheckShow) {
         if (that.sentence.isCheck) {
