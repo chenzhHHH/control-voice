@@ -306,6 +306,8 @@ public class RecordServiceImpl implements RecordService {
         record.setReviewTime(new Date());
         record.setPass(pass);
 
+        int update = recordMapper.updateById(record);
+
         return true;
     }
 }

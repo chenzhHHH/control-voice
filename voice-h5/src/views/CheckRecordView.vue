@@ -7,9 +7,9 @@
     <div class="filter_box">
       <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.totalNum }})</van-button>
 
-      <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未完成({{ sentenceNum.unFinishNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未审核({{ sentenceNum.unFinishNum }})</van-button>
 
-      <van-button class="filter_bt" :style="changeFilterBtStyle('finish')" round size="small" @click="filterSentence('finish')">已完成({{ sentenceNum.finishNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('finish')" round size="small" @click="filterSentence('finish')">已审核({{ sentenceNum.finishNum }})</van-button>
     </div>
   </div>
 

@@ -255,9 +255,27 @@ export default {
       this.$emit("triggerRefreshSentenceData");
     },
     checkSelect(action) {
-      // let that = this;
+      let that = this;
 
-      console.log(action.text);
+      let formData = {
+        recordId: that.sentence.recordId,
+        checkUserId: localStorage.getItem("userId"),
+        checkType: action.text,
+      };
+
+      let config = {
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      };
+
+      that.$http.post("/record/checkRecord", formData, config).then((response) => {
+        if (response.data.code === "2000") {
+          that.triggerRefreshSentenceData();
+          
+          that.$notify({ type: "success", message: response.data.data });
+        }
+      });
     },
   },
 };
