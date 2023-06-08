@@ -14,7 +14,7 @@
 
         <van-button class="record-control-bt" round type="danger" size="small" @click="stopRecorder()" v-show="isRecording">停止录音</van-button>
 
-        <van-button class="record-control-bt" round type="primary" :disabled="!isExistVoice" size="small" @click="playRecorder()">回听音频</van-button>
+        <van-button class="record-control-bt" round type="primary" :disabled="!sentence.isRecord" size="small" @click="playRecorder()">回听音频</van-button>
       </div>
 
       <div class="record-edit-box">
@@ -25,7 +25,7 @@
         <van-button class="record-edit-bt" round type="danger" size="small" @click="cancelEdit()" v-show="isEdit">取消</van-button>
       </div>
 
-      <div class="check_record_box" v-show="isCheckShow && isExistVoice">
+      <div class="check_record_box" v-show="!isEdit && isCheckShow && sentence.isRecord">
         <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkSelect">
           <template #reference>
             <van-button class="check_record_bt" round type="default" size="small">审核</van-button>
@@ -50,7 +50,6 @@ export default {
   data() {
     return {
       isRecording: false,
-      isExistVoice: false,
       isEdit: false,
       editContent: "",
       showCheckPopover: false,
@@ -77,18 +76,8 @@ export default {
 
     this.initRecorder();
   },
-  created() {
-    let that = this;
-
-    that.isExistVoice = that.sentence.isRecord;
-  },
-  watch: {
-    sentence(newSentence) {
-      let that = this;
-
-      that.isExistVoice = newSentence.isRecord;
-    },
-  },
+  created() {},
+  watch: {},
   computed: {
     changeContainerColor() {
       let that = this;
