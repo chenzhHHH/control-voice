@@ -118,8 +118,12 @@ public class RecordServiceImpl implements RecordService {
 
             int insert = recordMapper.insert(record);
         } else {
-            selectRecord.setVoiceName(voiceName);
-            selectRecord.setVoiceFilePath(voiceFilePath);
+            voiceFilePath = selectRecord.getVoiceFilePath();
+
+            if (!userId.equals(selectRecord.getUserId())) {
+                selectRecord.setRemark("reread_by: " + userId + ", date: " + new Date().toString());
+            }
+
             selectRecord.setUpdateTime(new Date());
 
             int update = recordMapper.updateById(selectRecord);
