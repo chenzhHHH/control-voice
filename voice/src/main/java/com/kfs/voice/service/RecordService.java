@@ -18,7 +18,7 @@ public interface RecordService {
 
     Boolean recordVoice(String recordId, String userId, String sentenceId, String wordId, MultipartFile voiceFile);
 
-    String getVoice(String userId, String sentenceId) throws IOException;
+    String getVoice(String recordId) throws IOException;
 
     Boolean editSentence(String sentenceId, String sentenceText);
 

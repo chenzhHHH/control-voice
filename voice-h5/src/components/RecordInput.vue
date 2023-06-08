@@ -181,8 +181,7 @@ export default {
       that.triggerUpdateIsShowOverlay({ isShowOverlay: true, showOverlayText: "正在播放", icon: "volume" });
 
       let formData = {
-        userId: localStorage.getItem("userId"),
-        sentenceId: that.sentence.id,
+        recordId: that.sentence.recordId,
       };
 
       let config = {
@@ -272,7 +271,7 @@ export default {
       that.$http.post("/record/checkRecord", formData, config).then((response) => {
         if (response.data.code === "2000") {
           that.triggerRefreshSentenceData();
-          
+
           that.$notify({ type: "success", message: response.data.data });
         }
       });

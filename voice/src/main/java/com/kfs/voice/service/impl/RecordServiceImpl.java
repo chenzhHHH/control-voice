@@ -160,15 +160,14 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public String getVoice(String userId, String sentenceId) throws IOException {
+    public String getVoice(String recordId) throws IOException {
 
         QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id", userId)
-                .eq("sentence_id", sentenceId);
+        recordQueryWrapper.eq("id", recordId);
         Record record = recordMapper.selectOne(recordQueryWrapper);
 
         if (record == null) {
-            return "";
+            return Strings.EMPTY;
         }
 
         String voiceFilePath = record.getVoiceFilePath();

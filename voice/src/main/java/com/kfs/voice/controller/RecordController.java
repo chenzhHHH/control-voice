@@ -80,11 +80,11 @@ public class RecordController {
 
     @CrossOrigin
     @PostMapping("/getVoice")
-    public Result getVoice(@RequestParam("userId") String userId, @RequestParam("sentenceId") String sentenceId) throws IOException {
+    public Result getVoice(@RequestParam("recordId") String recordId) throws IOException {
         Result<String> result = new Result<>();
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
-        result.setData(recordService.getVoice(userId, sentenceId));
+        result.setData(recordService.getVoice(recordId));
 
         return result;
     }
