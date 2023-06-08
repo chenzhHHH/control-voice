@@ -266,6 +266,27 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    public List<CheckSentenceVo> getCheckSentenceList(String userId, String wordId, String filterType) {
+        QueryWrapper<Sentence> wrapper = new QueryWrapper<>();
+
+        wrapper.eq("s.word_id", wordId);
+
+        if ("unFinish".equals(filterType)) {
+            wrapper.isNull("r.pass");
+        } else if ("finish".equals(filterType)) {
+            wrapper.isNotNull("r.pass");
+        }
+
+        return sentenceMapper.getCheckSentenceList(userId, wrapper);
+    }
+
+    @Override
+    public CheckSentenceNumVo getCheckSentenceNum(String userId, String wordId) {
+
+        return sentenceMapper.getCheckSentenceNum(userId, wordId);
+    }
+
+    @Override
     public Boolean checkRecord(CheckRecordVo checkRecordVo) {
         Record record = recordMapper.selectById(checkRecordVo.getRecordId());
 

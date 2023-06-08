@@ -26,5 +26,9 @@ public interface RecordService {
 
     CheckWordNumVo getCheckWordNum(String userId);
 
+    List<CheckSentenceVo> getCheckSentenceList(String userId, String wordId, String filterType);
+
+    CheckSentenceNumVo getCheckSentenceNum(String userId, String wordId);
+
     Boolean checkRecord(CheckRecordVo checkRecordVo);
 }

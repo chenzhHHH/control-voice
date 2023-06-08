@@ -5,7 +5,7 @@
     <div class="title_box">审核句式</div>
 
     <div class="filter_box">
-      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.sumNum }})</van-button>
+      <van-button class="filter_bt" :style="changeFilterBtStyle('')" round size="small" @click="filterSentence('')">全部({{ sentenceNum.totalNum }})</van-button>
 
       <van-button class="filter_bt" :style="changeFilterBtStyle('unFinish')" round size="small" @click="filterSentence('unFinish')">未完成({{ sentenceNum.unFinishNum }})</van-button>
 
@@ -14,7 +14,14 @@
   </div>
 
   <div class="container">
-    <RecordInput v-for="(item, index) in sentenceList" :key="index" :sentence="item" @triggerUpdateIsShowOverlay="updateIsShowOverlay" @triggerRefreshSentenceData="refreshSentenceData"></RecordInput>
+    <RecordInput
+      v-for="(item, index) in sentenceList"
+      :key="index"
+      :sentence="item"
+      @triggerUpdateIsShowOverlay="updateIsShowOverlay"
+      @triggerRefreshSentenceData="refreshSentenceData"
+      :isCheckShow="true"
+    ></RecordInput>
   </div>
 
   <van-overlay :show="overlay.isShowOverlay" z-index="2">
@@ -49,7 +56,7 @@ export default {
       sentenceList: [],
       filterType: "",
       sentenceNum: {
-        sumNum: 0,
+        totalNum: 0,
         unFinishNum: 0,
         finishNum: 0,
       },
@@ -85,7 +92,7 @@ export default {
         },
       };
 
-      that.$http.post("/record/getSentenceListByWordId", formData, config).then((response) => {
+      that.$http.post("/record/getCheckSentenceList", formData, config).then((response) => {
         that.sentenceList = response.data.data;
         that.updateIsShowOverlay({ isShowOverlay: false, showOverlayText: "数据获取" });
       });
@@ -104,7 +111,7 @@ export default {
         },
       };
 
-      that.$http.post("/record/getSentenceNumByWordId", formData, config).then((response) => {
+      that.$http.post("/record/getCheckSentenceNum", formData, config).then((response) => {
         that.sentenceNum = response.data.data;
       });
     },

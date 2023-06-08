@@ -127,6 +127,30 @@ public class RecordController {
     }
 
     @CrossOrigin
+    @PostMapping("/getCheckSentenceList")
+    public Result getCheckSentenceList(@RequestParam("userId") String userId, @RequestParam("wordId") String wordId, @RequestParam("filterType") String filterType) {
+        Result<List<CheckSentenceVo>> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getCheckSentenceList(userId, wordId, filterType));
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/getCheckSentenceNum")
+    public Result getCheckSentenceNum(@RequestParam("userId") String userId, @RequestParam("wordId") String wordId) {
+        Result<CheckSentenceNumVo> result = new Result<>();
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(recordService.getCheckSentenceNum(userId, wordId));
+
+        return result;
+    }
+
+    @CrossOrigin
     @PostMapping("/checkRecord")
     public Result checkRecord(@RequestBody CheckRecordVo checkRecordVo) {
         Result<String> result = new Result<>();

@@ -25,7 +25,7 @@
         <van-button class="record-edit-bt" round type="danger" size="small" @click="cancelEdit()" v-show="isEdit">取消</van-button>
       </div>
 
-      <div class="check_record_box">
+      <div class="check_record_box" v-show="isCheckShow && isExistVoice">
         <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkSelect">
           <template #reference>
             <van-button class="check_record_bt" round type="default" size="small">审核</van-button>
@@ -67,6 +67,10 @@ export default {
         return {};
       },
     },
+    isCheckShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   mounted() {
     this.getPermission();
@@ -89,10 +93,18 @@ export default {
     changeContainerColor() {
       let that = this;
 
-      if (that.sentence.isRecord) {
-        return "background-color: #D4EFDF";
+      if (that.isCheckShow) {
+        if (that.sentence.isCheck) {
+          return "background-color: #D4EFDF";
+        } else {
+          return "background-color: #EAEDED";
+        }
       } else {
-        return "background-color: #EAEDED";
+        if (that.sentence.isRecord) {
+          return "background-color: #D4EFDF";
+        } else {
+          return "background-color: #EAEDED";
+        }
       }
     },
   },
@@ -256,8 +268,8 @@ export default {
     checkSelect(action) {
       // let that = this;
 
-      console.log(action.text)
-    }
+      console.log(action.text);
+    },
   },
 };
 </script>
@@ -302,7 +314,7 @@ export default {
     }
 
     .check_record_box {
-      .check_record_bt{
+      .check_record_bt {
         margin: 0 1rem 0 1rem;
         font-size: 0.5rem;
       }
