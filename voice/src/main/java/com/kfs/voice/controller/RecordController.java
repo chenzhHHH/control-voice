@@ -67,8 +67,8 @@ public class RecordController {
 
     @CrossOrigin
     @PostMapping("/recordVoice")
-    public Result recordVoice(@RequestParam("userId") String userId, @RequestParam("sentenceId") String sentenceId, @RequestParam("wordId") String wordId, @RequestPart("voiceFile") MultipartFile voiceFile) {
-        Boolean isRecord = recordService.recordVoice(userId, sentenceId, wordId, voiceFile);
+    public Result recordVoice(@RequestParam("recordId") String recordId, @RequestParam("userId") String userId, @RequestParam("sentenceId") String sentenceId, @RequestParam("wordId") String wordId, @RequestPart("voiceFile") MultipartFile voiceFile) {
+        Boolean isRecord = recordService.recordVoice(recordId, userId, sentenceId, wordId, voiceFile);
 
         Result<String> result = new Result<>();
         result.setCode(ResultEnum.SUCCESS.getCode());

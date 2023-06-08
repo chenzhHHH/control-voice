@@ -88,7 +88,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Boolean recordVoice(String userId, String sentenceId, String wordId, MultipartFile voiceFile) {
+    public Boolean recordVoice(String recordId, String userId, String sentenceId, String wordId, MultipartFile voiceFile) {
         Pattern pattern = Pattern.compile("[\\s\\\\/:\\*\\?\\\".<>\\|]");
 
         userId = pattern.matcher(userId).replaceAll("");
@@ -102,13 +102,12 @@ public class RecordServiceImpl implements RecordService {
         String voiceFilePath = voiceDirPath + voiceName;
 
         QueryWrapper<Record> recordQueryWrapper = new QueryWrapper<>();
-        recordQueryWrapper.eq("user_id", userId)
-                .eq("word_id", wordId)
-                .eq("sentence_id", sentenceId);
+        recordQueryWrapper.eq("id", recordId);
         Record selectRecord = recordMapper.selectOne(recordQueryWrapper);
 
         if (selectRecord == null) {
             Record record = new Record();
+
             record.setUserId(userId);
             record.setWordId(wordId);
             record.setSentenceId(sentenceId);

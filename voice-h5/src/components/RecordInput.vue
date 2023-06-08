@@ -153,6 +153,7 @@ export default {
       that.$notify({ type: "danger", message: "停止录音" });
 
       let formData = {
+        recordId: that.sentence.recordId,
         userId: localStorage.getItem("userId"),
         sentenceId: that.sentence.id,
         wordId: that.sentence.wordId,
