@@ -123,6 +123,8 @@ public class RecordServiceImpl implements RecordService {
 
             if (!userId.equals(selectRecord.getUserId())) {
                 selectRecord.setRemark("reread_by: " + userId + ", date: " + new Date().toString());
+            } else {
+                selectRecord.setPass("");
             }
 
             selectRecord.setUpdateTime(new Date());
@@ -276,9 +278,9 @@ public class RecordServiceImpl implements RecordService {
         wrapper.eq("s.word_id", wordId);
 
         if ("unFinish".equals(filterType)) {
-            wrapper.isNull("r.pass");
+            wrapper.and(wp -> wp.isNull("r.pass").or().eq("r.pass", ""));
         } else if ("finish".equals(filterType)) {
-            wrapper.isNotNull("r.pass");
+            wrapper.and(wp -> wp.isNotNull("r.pass").ne("r.pass", ""));
         }
 
         return sentenceMapper.getCheckSentenceList(userId, wrapper);

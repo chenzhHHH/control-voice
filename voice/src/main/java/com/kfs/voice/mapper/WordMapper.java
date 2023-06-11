@@ -46,7 +46,7 @@ public interface WordMapper extends BaseMapper<Word> {
             "LEFT JOIN (" +
             "SELECT t_w.id, r.user_id, COUNT(*) AS finishCheckNum " +
             "FROM word t_w JOIN record r ON t_w.id = r.word_id " +
-            "WHERE r.review_user_id IS NOT NULL AND r.user_id = #{userId} GROUP BY t_w.id, r.user_id" +
+            "WHERE (r.pass != '' AND r.pass IS NOT NULL) AND r.user_id = #{userId} GROUP BY t_w.id, r.user_id" +
             ") temp_word_record ON w.id = temp_word_record.id " +
             "JOIN (" +
             "SELECT t_s.word_id, count(*) AS totalNum FROM sentence t_s GROUP BY t_s.word_id " +
@@ -60,7 +60,7 @@ public interface WordMapper extends BaseMapper<Word> {
             "LEFT JOIN (" +
             "SELECT t_w.id, r.user_id, COUNT(*) AS finishCheckNum " +
             "FROM word t_w JOIN record r ON t_w.id = r.word_id " +
-            "WHERE r.review_user_id IS NOT NULL AND r.user_id = #{userId} GROUP BY t_w.id, r.user_id" +
+            "WHERE (r.pass != '' AND r.pass IS NOT NULL) AND r.user_id = #{userId} GROUP BY t_w.id, r.user_id" +
             ") temp_word_record ON w.id = temp_word_record.id " +
             "JOIN (" +
             "SELECT t_s.word_id, count(*) AS totalNum FROM sentence t_s GROUP BY t_s.word_id " +

@@ -36,7 +36,7 @@ public interface SentenceMapper extends BaseMapper<Sentence> {
     @Select("SELECT " +
             "s.id, r.id AS recordId, s.word_id, s.sentence, r.pass, " +
             "(r.id IS NOT NULL) AS isRecord, " +
-            "(r.pass IS NOT NULL) AS isCheck, " +
+            "(r.pass != '' AND r.pass IS NOT NULL) AS isCheck, " +
             "(SELECT find_in_set('edit', temp_user.type) FROM user temp_user WHERE temp_user.id = #{userId}) AS isEdit " +
             "FROM sentence s " +
             "LEFT JOIN record r ON s.id = r.sentence_id AND r.user_id = #{userId} " +
@@ -50,7 +50,7 @@ public interface SentenceMapper extends BaseMapper<Sentence> {
             "COUNT(*) AS finishNum " +
             "FROM sentence s " +
             "LEFT JOIN record r ON s.id = r.sentence_id AND r.user_id = #{userId} " +
-            "WHERE s.word_id = #{wordId} AND r.pass IS NOT NULL"
+            "WHERE s.word_id = #{wordId} AND (r.pass != '' AND r.pass IS NOT NULL)"
     )
     CheckSentenceNumVo getCheckSentenceNum(@Param("userId") String userId, @Param("wordId") String wordId);
 }
