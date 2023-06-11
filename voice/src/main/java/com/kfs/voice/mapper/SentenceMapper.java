@@ -29,7 +29,7 @@ public interface SentenceMapper extends BaseMapper<Sentence> {
     @Select("SELECT (SELECT COUNT(*) FROM sentence temp_sentence WHERE temp_sentence.word_id = #{wordId}) AS totalNum, ((SELECT COUNT(*) FROM sentence temp_sentence WHERE temp_sentence.word_id = #{wordId}) - COUNT(*)) AS unFinishNum, COUNT(*) AS finishNum " +
             "FROM sentence s " +
             "LEFT JOIN record r ON s.id = r.sentence_id AND r.user_id = #{userId} " +
-            "WHERE s.word_id = #{wordId} AND r.id IS NOT NULL"
+            "WHERE s.word_id = #{wordId} AND r.id IS NOT NULL AND (r.pass != 'failure' OR r.pass IS NULL)"
     )
     SentenceNumVo getSentenceNum(@Param("userId") String userId, @Param("wordId") String wordId);
 

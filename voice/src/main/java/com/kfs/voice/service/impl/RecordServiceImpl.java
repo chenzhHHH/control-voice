@@ -73,9 +73,10 @@ public class RecordServiceImpl implements RecordService {
         wrapper.eq("s.word_id", wordId);
 
         if ("unFinish".equals(filterType)) {
-            wrapper.isNull("r.id");
+            wrapper.and(wp -> wp.isNull("r.id").or().eq("r.pass", "failure"));
         } else if ("finish".equals(filterType)) {
             wrapper.isNotNull("r.id");
+            wrapper.and(wp -> wp.ne("r.pass", "failure").or().isNull("r.pass"));
         }
 
         return sentenceMapper.getSentenceList(userId, wrapper);
