@@ -43,6 +43,10 @@ public interface WordMapper extends BaseMapper<Word> {
     WordNumVo getWordNum(String userId);
 
     @Select("SELECT w.id, w.word, temp_word_record.user_id AS userId, temp_word_record.finishCheckNum, temp_sentence.totalNum FROM word w " +
+            "JOIN (" +
+            "SELECT tt_w.id, COUNT(*) AS readNum " +
+            "FROM word tt_w JOIN record t_r ON tt_w.id = t_r.word_id WHERE t_r.user_id = #{userId} GROUP BY tt_w.id, t_r.user_id" +
+            ") temp_read_word_record ON w.id = temp_read_word_record.id AND temp_read_word_record.readNum > 0 " +
             "LEFT JOIN (" +
             "SELECT t_w.id, r.user_id, COUNT(*) AS finishCheckNum " +
             "FROM word t_w JOIN record r ON t_w.id = r.word_id " +
@@ -55,7 +59,10 @@ public interface WordMapper extends BaseMapper<Word> {
     )
     List<CheckWordVo> getCheckWordList(@Param("userId") String userId, @Param(Constants.WRAPPER) QueryWrapper wrapper);
 
-    @Select("SELECT (SELECT COUNT(*) FROM word temp_word WHERE temp_word.is_delete = 0) AS totalNum, (SELECT COUNT(*) FROM word temp_word WHERE temp_word.is_delete = 0) - COUNT(*) AS unFinishCheckNum, COUNT(*) AS finishCheckNum " +
+    @Select("SELECT " +
+            "(SELECT COUNT(*) FROM word temp_word JOIN (SELECT tt_w.id, COUNT(*) AS readNum FROM word tt_w JOIN record t_r ON tt_w.id = t_r.word_id WHERE t_r.user_id = #{userId} GROUP BY tt_w.id, t_r.user_id ) temp_read_word_record ON temp_word.id = temp_read_word_record.id AND temp_read_word_record.readNum > 0 WHERE temp_word.is_delete = 0) AS totalNum, " +
+            "(SELECT COUNT(*) FROM word temp_word JOIN (SELECT tt_w.id, COUNT(*) AS readNum FROM word tt_w JOIN record t_r ON tt_w.id = t_r.word_id WHERE t_r.user_id = #{userId} GROUP BY tt_w.id, t_r.user_id ) temp_read_word_record ON temp_word.id = temp_read_word_record.id AND temp_read_word_record.readNum > 0 WHERE temp_word.is_delete = 0) - COUNT(*) AS unFinishCheckNum, " +
+            "COUNT(*) AS finishCheckNum " +
             "FROM word w " +
             "LEFT JOIN (" +
             "SELECT t_w.id, r.user_id, COUNT(*) AS finishCheckNum " +
