@@ -15,6 +15,7 @@ public class UserRelCheckerVo implements Serializable {
     private String checkerId;
     private String checkername;
 
-    private int finishNum;
+    private int finishReadNum;
+    private int finishCheckNum;
     private int totalNum;
 }

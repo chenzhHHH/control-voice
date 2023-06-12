@@ -7,11 +7,11 @@
 
   <div class="container">
     <div class="choose_user_box" v-for="(item, index) in userRelCheckerList" :key="index" :value="item">
-      <div class="choose_user_item" :style="changeChooseUserItemColor(item.finishNum, item.totalNum)" @click="chooseUser(item)">
+      <div class="choose_user_item" :style="changeChooseUserItemColor(item.finishCheckNum, item.totalNum)" @click="chooseUser(item)">
         <van-row class="choose_user_item_row">
-          <van-col span="10">{{ item.username }}</van-col>
-          <van-col span="7" offset="4">{{ item.finishNum }}/{{ item.totalNum }}</van-col>
-          <van-col span="3">
+          <van-col span="10">{{ item.username }}({{ item.finishReadNum }}/{{ item.totalNum }})</van-col>
+          <van-col span="7" offset="4">{{ item.finishCheckNum }}/{{ item.totalNum }}</van-col>
+          <van-col span="2" offset="1">
             <div class="in_icon_box">
               <van-icon class="in_icon" name="arrow" size="20px" />
             </div>
@@ -37,8 +37,8 @@ export default {
   },
   computed: {
     changeChooseUserItemColor() {
-      return (finishNum, totalNum) => {
-        if (finishNum === totalNum) {
+      return (finishCheckNum, totalNum) => {
+        if (finishCheckNum === totalNum) {
           return "background-color: #D4EFDF";
         } else {
           return "background-color: #EAEDED";

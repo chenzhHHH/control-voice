@@ -25,7 +25,9 @@ public interface UserRelCheckerMapper extends BaseMapper<UserRelChecker> {
     List<UserRelCheckerVo> getUserRelCheckerList(@Param(Constants.WRAPPER) QueryWrapper wrapper);
 
     @Select("SELECT " +
-            "temp_rel.id AS id, u.id AS userId, u.cn_name AS username, temp_user_record.record_count AS finishNum, " +
+            "temp_rel.id AS id, u.id AS userId, u.cn_name AS username, " +
+            "temp_read_user_record.read_record_count AS finishReadNum, " +
+            "temp_check_user_record.check_record_count AS finishCheckNum, " +
             "(SELECT count(*) FROM sentence) AS totalNum, " +
             "temp_rel.checkerId, temp_rel.checkername " +
             "FROM user u " +
@@ -34,9 +36,14 @@ public interface UserRelCheckerMapper extends BaseMapper<UserRelChecker> {
             "FROM user_rel_checker t_urc JOIN user t_cu ON t_urc.checker_id = t_cu.id" +
             ") temp_rel ON u.id = temp_rel.userId " +
             "LEFT JOIN (" +
-            "SELECT t_u.id, count(*) AS record_count " +
+            "SELECT t_u.id, count(*) AS read_record_count " +
             "FROM user t_u JOIN record r ON t_u.id = r.user_id GROUP BY t_u.id" +
-            ") temp_user_record ON u.id = temp_user_record.id " +
+            ") temp_read_user_record ON u.id = temp_read_user_record.id " +
+            "LEFT JOIN (" +
+            "SELECT t_u.id, count(*) AS check_record_count " +
+            "FROM user t_u JOIN record r ON t_u.id = r.user_id " +
+            "WHERE r.pass != '' AND r.pass IS NOT NULL GROUP BY t_u.id" +
+            ") temp_check_user_record ON u.id = temp_check_user_record.id " +
             "${ew.customSqlSegment}"
     )
     List<UserRelCheckerVo> getUserRelCheckerListByCheckerId(@Param(Constants.WRAPPER) QueryWrapper wrapper);

@@ -183,12 +183,12 @@ export default {
       let checkRecordIdList = [];
 
       that.sentenceList.forEach((sentence) => {
-        if (that.$refs["check_" + sentence.id][0].isCheckChecked) {
+        if (that.$refs["check_" + sentence.id][0].isCheckChecked && sentence.recordId) {
           checkRecordIdList.push(sentence.recordId);
         }
       });
 
-      if(checkRecordIdList.length === 0) {
+      if (checkRecordIdList.length === 0) {
         that.$notify({ type: "warning", message: "请选择审核句式" });
 
         return;
