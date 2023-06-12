@@ -31,4 +31,6 @@ public interface RecordService {
     CheckSentenceNumVo getCheckSentenceNum(String userId, String wordId);
 
     Boolean checkRecord(CheckRecordVo checkRecordVo);
+
+    Boolean checkRecords(CheckRecordVo checkRecordVo);
 }

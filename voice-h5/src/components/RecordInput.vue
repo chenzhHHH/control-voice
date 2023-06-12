@@ -8,6 +8,10 @@
       </van-cell-group>
     </div>
 
+    <div class="check_checkbox_box" v-show="isCheckShow && sentence.isRecord">
+      <van-checkbox v-model="isCheckChecked"></van-checkbox>
+    </div>
+
     <div class="control-box">
       <div class="record-control-box" v-show="!isEdit">
         <van-button class="record-control-bt" round type="success" size="small" @click="startRecorder()" v-show="!isRecording">开始录音</van-button>
@@ -25,7 +29,7 @@
         <van-button class="record-edit-bt" round type="danger" size="small" @click="cancelEdit()" v-show="isEdit">取消</van-button>
       </div>
 
-      <div class="check_record_box" v-show="!isEdit && isCheckShow && sentence.isRecord">
+      <div class="check_record_box" v-show="isCheckShow && sentence.isRecord">
         <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkSelect">
           <template #reference>
             <van-button class="check_record_bt" round type="default" size="small"> 审核{{ sentence.pass == "pass" ? "(合格)" : sentence.pass == "failure" ? "(不合格)" : "" }} </van-button>
@@ -38,7 +42,7 @@
 
 <script>
 import Recorder from "js-audio-recorder";
-import { Loading, Overlay, Dialog, Popover } from "vant";
+import { Loading, Overlay, Dialog, Popover, Checkbox } from "vant";
 
 export default {
   components: {
@@ -46,6 +50,7 @@ export default {
     [Overlay.name]: Overlay,
     [Dialog.name]: Dialog,
     [Popover.name]: Popover,
+    [Checkbox.name]: Checkbox,
   },
   data() {
     return {
@@ -57,6 +62,7 @@ export default {
         { text: "合格", icon: "passed" },
         { text: "不合格", icon: "close" },
       ],
+      isCheckChecked: false,
     };
   },
   props: {
@@ -83,8 +89,8 @@ export default {
       let that = this;
 
       if (that.sentence.pass === "failure") {
-          return "background-color: #F0B27A";
-        }
+        return "background-color: #F0B27A";
+      }
 
       if (that.isCheckShow) {
         if (that.sentence.isCheck) {
@@ -302,6 +308,10 @@ export default {
       width: 100%;
       height: auto;
     }
+  }
+
+  .check_checkbox_box {
+    width: 95%
   }
 
   .control-box {

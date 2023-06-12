@@ -163,4 +163,18 @@ public class RecordController {
 
         return result;
     }
+
+    @CrossOrigin
+    @PostMapping("/checkRecords")
+    public Result checkRecords(@RequestBody CheckRecordVo checkRecordVo) {
+        Result<String> result = new Result<>();
+
+        Boolean isCheck = recordService.checkRecords(checkRecordVo);
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData("审核成功");
+
+        return result;
+    }
 }

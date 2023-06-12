@@ -11,6 +11,20 @@
 
       <van-button class="filter_bt" :style="changeFilterBtStyle('finish')" round size="small" @click="filterSentence('finish')">已审核({{ sentenceNum.finishNum }})</van-button>
     </div>
+
+    <div class="check_box">
+      <div class="check_all_checked_box">
+        <van-checkbox v-model="isCheckAllChecked"></van-checkbox>
+      </div>
+
+      <div class="check_record_box">
+        <van-popover v-model:show="showCheckPopover" :actions="checkActions" @select="checkAllSelect">
+          <template #reference>
+            <van-button class="check_record_bt" round type="default" size="small"> 审核 </van-button>
+          </template>
+        </van-popover>
+      </div>
+    </div>
   </div>
 
   <div class="container">
@@ -18,6 +32,7 @@
       v-for="(item, index) in sentenceList"
       :key="index"
       :sentence="item"
+      :ref="'check_' + item.id"
       @triggerUpdateIsShowOverlay="updateIsShowOverlay"
       @triggerRefreshSentenceData="refreshSentenceData"
       :isCheckShow="true"
@@ -38,13 +53,15 @@
     
 <script>
 import RecordInput from "@/components/RecordInput.vue";
-import { Loading, Overlay } from "vant";
+import { Loading, Overlay, Popover, Checkbox } from "vant";
 
 export default {
   components: {
     RecordInput,
     [Loading.name]: Loading,
     [Overlay.name]: Overlay,
+    [Popover.name]: Popover,
+    [Checkbox.name]: Checkbox,
   },
   data() {
     return {
@@ -60,10 +77,25 @@ export default {
         unFinishNum: 0,
         finishNum: 0,
       },
+      showCheckPopover: false,
+      checkActions: [
+        { text: "合格", icon: "passed" },
+        { text: "不合格", icon: "close" },
+      ],
+      isCheckAllChecked: false,
     };
   },
   created() {
     this.initData();
+  },
+  watch: {
+    isCheckAllChecked(newVal) {
+      let that = this;
+
+      that.sentenceList.forEach((sentence) => {
+        that.$refs["check_" + sentence.id][0].isCheckChecked = newVal;
+      });
+    },
   },
   computed: {
     changeFilterBtStyle() {
@@ -145,6 +177,43 @@ export default {
 
       that.initData();
     },
+    checkAllSelect(action) {
+      let that = this;
+
+      let checkRecordIdList = [];
+
+      that.sentenceList.forEach((sentence) => {
+        if (that.$refs["check_" + sentence.id][0].isCheckChecked) {
+          checkRecordIdList.push(sentence.recordId);
+        }
+      });
+
+      if(checkRecordIdList.length === 0) {
+        that.$notify({ type: "warning", message: "请选择审核句式" });
+
+        return;
+      }
+
+      let formData = {
+        recordIds: checkRecordIdList,
+        checkUserId: localStorage.getItem("userId"),
+        checkType: action.text,
+      };
+
+      let config = {
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      };
+
+      that.$http.post("/record/checkRecords", formData, config).then((response) => {
+        if (response.data.code === "2000") {
+          that.refreshSentenceData();
+
+          that.$notify({ type: "success", message: response.data.data });
+        }
+      });
+    },
   },
 };
 </script>
@@ -158,7 +227,7 @@ export default {
   bottom: 0;
   z-index: 2;
   background-color: #f8f8f8;
-  height: 11rem;
+  height: 14rem;
   .back_icon {
     margin: 1rem;
   }
@@ -177,9 +246,22 @@ export default {
       color: black;
     }
   }
+
+  .check_box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    .check_all_checked_box {
+    }
+
+    .check_record_box {
+      margin-left: 1rem;
+    }
+  }
 }
 .container {
-  margin-top: 11rem;
+  margin-top: 14rem;
 }
 
 .overlay-wrapper {

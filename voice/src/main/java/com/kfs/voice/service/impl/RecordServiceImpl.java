@@ -316,4 +316,31 @@ public class RecordServiceImpl implements RecordService {
 
         return true;
     }
+
+    @Override
+    public Boolean checkRecords(CheckRecordVo checkRecordVo) {
+        checkRecordVo.getRecordIds().stream().forEach(recordId -> {
+            Record record = recordMapper.selectById(recordId);
+
+            if (record == null) {
+                return;
+            }
+
+            String pass = Strings.EMPTY;
+
+            if ("合格".equals(checkRecordVo.getCheckType())) {
+                pass = "pass";
+            } else if ("不合格".equals(checkRecordVo.getCheckType())) {
+                pass = "failure";
+            }
+
+            record.setReviewUserId(checkRecordVo.getCheckUserId());
+            record.setReviewTime(new Date());
+            record.setPass(pass);
+
+            int update = recordMapper.updateById(record);
+        });
+
+        return true;
+    }
 }
