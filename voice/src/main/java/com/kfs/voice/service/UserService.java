@@ -2,6 +2,7 @@ package com.kfs.voice.service;
 
 import com.kfs.voice.entity.User;
 import com.kfs.voice.vo.LoginUserVo;
+import com.kfs.voice.vo.UserAuthVo;
 import com.kfs.voice.vo.UserRelCheckerVo;
 import com.kfs.voice.vo.UserVo;
 
@@ -17,4 +18,6 @@ public interface UserService {
     Boolean insertOrUpdateUserRelChecker(String id, String userId, String checkerId);
 
     List<UserRelCheckerVo> getUserRelCheckerListByCheckerId(String checkerId);
+
+    UserAuthVo getUserAuth(String userId);
 }

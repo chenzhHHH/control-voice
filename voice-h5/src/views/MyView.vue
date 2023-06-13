@@ -8,13 +8,13 @@
       </div>
 
       <div class="user_info_box">
-        <div class="user_info_text">{{ cnName }}</div>
+        <div class="user_info_text">{{ userAuth.cnName }}</div>
       </div>
     </div>
 
     <div class="option_box">
       <van-row>
-        <van-col span="6">
+        <van-col span="6" v-show="userAuth.isCheck">
           <div class="option_item_box" @click="chooseChecker()">
             <div class="option_item_icon">
               <van-icon name="friends-o" color="#17202A" size="2.3rem" />
@@ -48,12 +48,15 @@ export default {
   data() {
     return {
       cnName: "",
+      userAuth: {}
     };
   },
   created() {
     let that = this;
 
     that.cnName = localStorage.getItem("cnName");
+
+    that.initUserAuth();
   },
   methods: {
     chooseChecker() {
@@ -65,6 +68,23 @@ export default {
     logout() {
       localStorage.clear();
       this.$router.replace("/home");
+    },
+    initUserAuth() {
+      let that = this;
+
+      let formData = {
+        userId: localStorage.getItem("userId"),
+      };
+
+      let config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+
+      that.$http.post("/user/getUserAuth", formData, config).then((response) => {
+        that.userAuth = response.data.data;
+      });
     },
   },
 };

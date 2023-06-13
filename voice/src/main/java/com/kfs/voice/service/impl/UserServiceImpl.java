@@ -10,6 +10,7 @@ import com.kfs.voice.mapper.UserRelCheckerMapper;
 import com.kfs.voice.service.UserService;
 import com.kfs.voice.utils.JwtUtil;
 import com.kfs.voice.vo.LoginUserVo;
+import com.kfs.voice.vo.UserAuthVo;
 import com.kfs.voice.vo.UserRelCheckerVo;
 import com.kfs.voice.vo.UserVo;
 import org.apache.logging.log4j.util.Strings;
@@ -108,6 +109,28 @@ public class UserServiceImpl implements UserService {
         List<UserRelCheckerVo> userRelCheckerList = userRelCheckerMapper.getUserRelCheckerListByCheckerId(queryWrapper);
 
         return userRelCheckerList;
+    }
+
+    @Override
+    public UserAuthVo getUserAuth(String userId) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("id", userId);
+
+        UserAuthVo userAuthVo = new UserAuthVo();
+
+        User user = userMapper.selectOne(userQueryWrapper);
+
+        if (user == null) {
+            return userAuthVo;
+        }
+
+        userAuthVo.setUserId(userId);
+        userAuthVo.setUsername(user.getUsername());
+        userAuthVo.setCnName(user.getCnName());
+        userAuthVo.setIsCheck(user.getType().contains("check"));
+        userAuthVo.setIsEdit(user.getType().contains("edit"));
+
+        return userAuthVo;
     }
 
     private List<UserVo> buildUserVos(List<User> users) {

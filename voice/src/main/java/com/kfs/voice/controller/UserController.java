@@ -3,10 +3,7 @@ package com.kfs.voice.controller;
 import com.kfs.voice.entity.User;
 import com.kfs.voice.enums.ResultEnum;
 import com.kfs.voice.service.impl.UserServiceImpl;
-import com.kfs.voice.vo.LoginUserVo;
-import com.kfs.voice.vo.Result;
-import com.kfs.voice.vo.UserRelCheckerVo;
-import com.kfs.voice.vo.UserVo;
+import com.kfs.voice.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,6 +83,20 @@ public class UserController {
         result.setCode(ResultEnum.SUCCESS.getCode());
         result.setMsg(ResultEnum.SUCCESS.getMsg());
         result.setData(userVos);
+
+        return result;
+    }
+
+    @CrossOrigin
+    @PostMapping("/getUserAuth")
+    public Result getUserAuth(@RequestParam("userId") String userId) {
+        Result<UserAuthVo> result = new Result<>();
+
+        UserAuthVo userAuth = userService.getUserAuth(userId);
+
+        result.setCode(ResultEnum.SUCCESS.getCode());
+        result.setMsg(ResultEnum.SUCCESS.getMsg());
+        result.setData(userAuth);
 
         return result;
     }
