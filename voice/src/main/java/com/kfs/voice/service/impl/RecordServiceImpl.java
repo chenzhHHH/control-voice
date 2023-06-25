@@ -70,7 +70,8 @@ public class RecordServiceImpl implements RecordService {
     public List<SentenceVo> getSentenceList(String userId, String wordId, String filterType) {
         QueryWrapper<Sentence> wrapper = new QueryWrapper<>();
 
-        wrapper.eq("s.word_id", wordId);
+        wrapper.eq("s.word_id", wordId)
+                .and(wp -> wp.eq("r.is_delete", false).or().isNull("r.is_delete"));
 
         if ("unFinish".equals(filterType)) {
             wrapper.and(wp -> wp.isNull("r.id").or().eq("r.pass", "failure"));
@@ -275,7 +276,8 @@ public class RecordServiceImpl implements RecordService {
     public List<CheckSentenceVo> getCheckSentenceList(String userId, String wordId, String filterType) {
         QueryWrapper<Sentence> wrapper = new QueryWrapper<>();
 
-        wrapper.eq("s.word_id", wordId);
+        wrapper.eq("s.word_id", wordId)
+                .and(wp -> wp.eq("r.is_delete", false).or().isNull("r.is_delete"));
 
         if ("unFinish".equals(filterType)) {
             wrapper.and(wp -> wp.isNull("r.pass").or().eq("r.pass", ""));
