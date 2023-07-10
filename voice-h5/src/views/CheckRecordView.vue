@@ -36,6 +36,7 @@
       @triggerUpdateIsShowOverlay="updateIsShowOverlay"
       @triggerRefreshSentenceData="refreshSentenceData"
       :isCheckShow="true"
+      :checkedUserId="checkedUserId"
     ></RecordInput>
   </div>
 
@@ -83,10 +84,14 @@ export default {
         { text: "不合格", icon: "close" },
       ],
       isCheckAllChecked: false,
+      checkedUserId: "",
     };
   },
   created() {
-    this.initData();
+    let that = this;
+
+    that.initData();
+    that.checkedUserId = that.$route.params.userId
   },
   watch: {
     isCheckAllChecked(newVal) {

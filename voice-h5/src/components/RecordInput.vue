@@ -14,7 +14,7 @@
 
     <div class="control-box">
       <div class="record-control-box" v-show="!isEdit">
-        <van-button class="record-control-bt" round type="success" size="small" @click="startRecorder()" v-show="!isRecording">开始录音</van-button>
+        <van-button class="record-control-bt" round type="success" size="small" @click="startRecorder()" :disabled="checkedUserId && !sentence.isRecord" v-show="!isRecording">开始录音</van-button>
 
         <van-button class="record-control-bt" round type="danger" size="small" @click="stopRecorder()" v-show="isRecording">停止录音</van-button>
 
@@ -76,6 +76,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    checkedUserId: {
+      type: String,
+      default: null
+    }
   },
   mounted() {
     this.getPermission();
