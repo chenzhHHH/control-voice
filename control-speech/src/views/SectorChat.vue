@@ -1,5 +1,5 @@
 <template>
-  <div class="container_box">
+  <div class="sector_chat_container_box">
     <div class="title_box">当前扇区 AC4</div>
 
     <div class="chat_box">
@@ -32,14 +32,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container_box {
+.sector_chat_container_box {
   .title_box {
     font-size: 2rem;
   }
   .chat_box {
     height: 85vh;
     overflow-y: scroll;
-    padding: 20px;
+    padding: 1rem;
     box-sizing: border-box;
     &::-webkit-scrollbar {
       width: 0; /* Safari,Chrome 隐藏滚动条 */

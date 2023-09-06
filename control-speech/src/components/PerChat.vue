@@ -1,19 +1,23 @@
 <template>
-  <div class="container_box" :style="isSelf ? 'flex-direction: row-reverse' : 'flex-direction: row'">
+  <div class="per_chat_container_box" :style="isSelf ? 'flex-direction: row-reverse' : 'flex-direction: row'">
     <div class="profile_img_box">
       <el-avatar :src="require('@/assets/logo.png')" />
     </div>
 
     <div :class="isSelf ? 'content_box_self' : 'content_box_not_self'">
-        
+      <PerVoiceChat :isSelf="isSelf"></PerVoiceChat>
     </div>
   </div>
 </template>
 
 <script>
+import PerVoiceChat from "@/components/PerVoiceChat.vue";
+
 export default {
   name: "PerChat",
-  components: {},
+  components: {
+    PerVoiceChat,
+  },
   data() {
     return {};
   },
@@ -24,51 +28,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container_box {
+.per_chat_container_box {
   width: 100%;
   float: left;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 10px 0 10px 0;
+  padding: 0.5rem 0 0.5rem 0;
   .profile_img_box {
   }
   .content_box_self {
-    height: 100px;
-    margin: 0 20px 0 20px;
-    padding: 5px 5px 5px 5px;
-    border-radius: 5px;
+    margin: 0 1.5rem 0 1.5rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+    border-radius: 0.5rem;
     background-color: #ccc;
     position: relative;
-    
+
     &::before {
       content: "";
-      border-top: 5px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 10px solid #ccc;
+      border-top: 0.3rem solid transparent;
+      border-bottom: 0.8rem solid transparent;
+      border-left: 0.8rem solid #ccc;
       position: absolute;
-      top: 12px;
-      right: -10px;
+      top: 0.8rem;
+      right: -0.6rem;
     }
   }
 
   .content_box_not_self {
-    height: 100px;
-    margin: 0 20px 0 20px;
-    padding: 5px 5px 5px 5px;
-    border-radius: 5px;
+    margin: 0 1.5rem 0 1.5rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+    border-radius: 0.5rem;
     background-color: #ccc;
     position: relative;
-    
+
     &::before {
       content: "";
-      border-top: 5px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 10px solid #ccc;
+      border-top: 0.3rem solid transparent;
+      border-bottom: 0.8rem solid transparent;
+      border-right: 0.8rem solid #ccc;
       position: absolute;
-      top: 12px;
-      left: -10px;
+      top: 0.8rem;
+      left: -0.6rem;
     }
   }
 }
