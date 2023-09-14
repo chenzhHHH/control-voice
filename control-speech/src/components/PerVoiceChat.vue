@@ -16,7 +16,7 @@
       <div class="callsign_box" :style="isSelf ? 'padding: 0 0.5rem 0 2rem' : 'padding: 0 2rem 0 0.5rem'">CSN3301</div>
 
       <div class="signal_box">
-        <el-icon color="brown" size="30">
+        <el-icon color="#9b6c4f" size="30">
           <CaretRight />
         </el-icon>
       </div>
@@ -65,15 +65,17 @@ export default {
         justify-content: center;
       }
       .voice_msg_box {
+        color: #969aa6;
       }
     }
     .tag_box {
       border: 0.1rem solid yellow;
       background-color: yellow;
       border-radius: 0.3rem;
+      color: #000;
     }
     .callsign_box {
-        
+      color: #1cbc66;
     }
     .signal_box {
       display: flex;

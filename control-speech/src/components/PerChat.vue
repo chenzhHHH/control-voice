@@ -42,14 +42,14 @@ export default {
     margin: 0 1.5rem 0 1.5rem;
     padding: 0.3rem 0.3rem 0.3rem 0.3rem;
     border-radius: 0.5rem;
-    background-color: #ccc;
+    background-color: #353b48;
     position: relative;
 
     &::before {
       content: "";
       border-top: 0.3rem solid transparent;
       border-bottom: 0.8rem solid transparent;
-      border-left: 0.8rem solid #ccc;
+      border-left: 0.8rem solid #353b48;
       position: absolute;
       top: 0.8rem;
       right: -0.6rem;
@@ -60,14 +60,14 @@ export default {
     margin: 0 1.5rem 0 1.5rem;
     padding: 0.3rem 0.3rem 0.3rem 0.3rem;
     border-radius: 0.5rem;
-    background-color: #ccc;
+    background-color: #575e70;
     position: relative;
 
     &::before {
       content: "";
       border-top: 0.3rem solid transparent;
       border-bottom: 0.8rem solid transparent;
-      border-right: 0.8rem solid #ccc;
+      border-right: 0.8rem solid #575e70;
       position: absolute;
       top: 0.8rem;
       left: -0.6rem;
