@@ -1,24 +1,22 @@
 <template>
   <div class="per_voice_chat_container_box">
-    <div class="main_msg_box" :style="isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
-      <div class="voice_box" :style="isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
+    <div class="main_msg_box" :style="perChatData.isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
+      <div class="voice_box" :style="perChatData.isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
         <div class="voice_icon_box">
           <el-icon color="green" size="30">
             <VideoPlay />
           </el-icon>
         </div>
 
-        <div class="voice_msg_box" :style="isSelf ? 'padding: 0 2rem 0 0.5rem' : 'padding: 0 0.5rem 0 2rem'">12:30</div>
+        <div class="chat_time_box" :style="perChatData.isSelf ? 'padding: 0 2rem 0 0.5rem' : 'padding: 0 0.5rem 0 2rem'">{{ perChatData.chatTime }}</div>
       </div>
 
-      <div class="tag_box">复诵-缺失跑道20R</div>
+      <div class="tag_box" v-show="perChatData.tag">{{ perChatData.tag }}</div>
 
-      <div class="callsign_box" :style="isSelf ? 'padding: 0 0.5rem 0 2rem' : 'padding: 0 2rem 0 0.5rem'">CSN3301</div>
+      <div class="callsign_box" :style="perChatData.isSelf ? 'padding: 0 0.5rem 0 2rem' : 'padding: 0 2rem 0 0.5rem'">{{ perChatData.callsign }}</div>
 
       <div class="signal_box">
-        <el-icon color="#9b6c4f" size="30">
-          <CaretRight />
-        </el-icon>
+        <div class="signal_text_box">{{ perChatData.signal }}</div>
       </div>
     </div>
 
@@ -27,7 +25,7 @@
     </div>
 
     <div class="brief_msg_box">
-      <div class="discribe_msg_box">南方3301<span style="color: green">进跑道</span>20右</div>
+      <div class="discribe_msg_box" v-html="perChatData.discribe"></div>
     </div>
   </div>
 </template>
@@ -40,7 +38,12 @@ export default {
     return {};
   },
   props: {
-    isSelf: Boolean,
+    perChatData: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
 };
 </script>
@@ -64,7 +67,7 @@ export default {
         align-items: center;
         justify-content: center;
       }
-      .voice_msg_box {
+      .chat_time_box {
         color: #969aa6;
       }
     }
@@ -73,15 +76,27 @@ export default {
       background-color: yellow;
       border-radius: 0.3rem;
       color: #000;
+      font-weight: 600;
     }
     .callsign_box {
+      font-size: 1.5rem;
       color: #1cbc66;
+      font-weight: 600;
     }
     .signal_box {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      .signal_text_box {
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 0.9rem;
+        background-color: #9b6c4f;
+        text-align: center;
+        line-height: 1.8rem;
+        font-weight: 600;
+      }
     }
   }
 

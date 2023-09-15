@@ -1,11 +1,11 @@
 <template>
-  <div class="per_chat_container_box" :style="isSelf ? 'flex-direction: row-reverse' : 'flex-direction: row'">
+  <div class="per_chat_container_box" :style="perChatData.isSelf ? 'flex-direction: row-reverse' : 'flex-direction: row'">
     <div class="profile_img_box">
       <el-avatar :src="require('@/assets/logo.png')" />
     </div>
 
-    <div :class="isSelf ? 'content_box_self' : 'content_box_not_self'">
-      <PerVoiceChat :isSelf="isSelf"></PerVoiceChat>
+    <div :class="perChatData.isSelf ? 'content_box_self' : 'content_box_not_self'">
+      <PerVoiceChat :perChatData="perChatData"></PerVoiceChat>
     </div>
   </div>
 </template>
@@ -22,7 +22,12 @@ export default {
     return {};
   },
   props: {
-    isSelf: Boolean,
+    perChatData: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
 };
 </script>
