@@ -24,7 +24,7 @@ export default {
         {
           isSelf: true,
           chatTime: "12:30",
-          tag: "复诵-缺失跑道20R",
+          tag: "",
           callsign: "CSN3301",
           signal: "进",
           discribe: "南方3301<span style='color:#1dbf67'>进跑道</span>20右",
