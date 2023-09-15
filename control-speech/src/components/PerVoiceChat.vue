@@ -1,24 +1,60 @@
 <template>
   <div class="per_voice_chat_container_box">
-    <div class="main_msg_box" :style="perChatData.isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
-      <div class="voice_box" :style="perChatData.isSelf ? 'flex-direction: row' : 'flex-direction: row-reverse'">
+    <el-row class="main_msg_box" v-if="perChatData.isSelf">
+      <el-col :span="2">
         <div class="voice_icon_box">
           <el-icon color="green" size="30">
             <VideoPlay />
           </el-icon>
         </div>
+      </el-col>
 
-        <div class="chat_time_box" :style="perChatData.isSelf ? 'padding: 0 2rem 0 0.5rem' : 'padding: 0 0.5rem 0 2rem'">{{ perChatData.chatTime }}</div>
-      </div>
+      <el-col :span="3">
+        <div class="chat_time_box">{{ perChatData.chatTime }}</div>
+      </el-col>
 
-      <div class="tag_box" v-show="perChatData.tag">{{ perChatData.tag }}</div>
+      <el-col :offset="1" :span="10">
+        <div class="tag_box" v-show="perChatData.tag">{{ perChatData.tag }}</div>
+      </el-col>
 
-      <div class="callsign_box" :style="perChatData.isSelf ? 'padding: 0 0.5rem 0 2rem' : 'padding: 0 2rem 0 0.5rem'">{{ perChatData.callsign }}</div>
+      <el-col :span="6">
+        <div class="callsign_box">{{ perChatData.callsign }}</div>
+      </el-col>
 
-      <div class="signal_box">
-        <div class="signal_text_box">{{ perChatData.signal }}</div>
-      </div>
-    </div>
+      <el-col :span="2">
+        <div class="signal_box">
+          <div class="signal_text_box">{{ perChatData.signal }}</div>
+        </div>
+      </el-col>
+    </el-row>
+
+    <el-row class="main_msg_box" v-else>
+      <el-col :span="2">
+        <div class="signal_box">
+          <div class="signal_text_box">{{ perChatData.signal }}</div>
+        </div>
+      </el-col>
+
+      <el-col :span="6">
+        <div class="callsign_box">{{ perChatData.callsign }}</div>
+      </el-col>
+
+      <el-col :offset="1" :span="10">
+        <div class="tag_box" v-show="perChatData.tag">{{ perChatData.tag }}</div>
+      </el-col>
+
+      <el-col :span="3">
+        <div class="chat_time_box">{{ perChatData.chatTime }}</div>
+      </el-col>
+
+      <el-col :span="2">
+        <div class="voice_icon_box">
+          <el-icon color="green" size="30">
+            <VideoPlay />
+          </el-icon>
+        </div>
+      </el-col>
+    </el-row>
 
     <div class="divider_box">
       <el-divider />
@@ -50,28 +86,25 @@ export default {
 
 <style lang="scss" scoped>
 .per_voice_chat_container_box {
+  min-width: 30rem;
   padding: 1rem 1rem 1rem 1rem;
   .main_msg_box {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    .voice_box {
+    .voice_icon_box {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      .voice_icon_box {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-      }
-      .chat_time_box {
-        color: #969aa6;
-      }
+    }
+    .chat_time_box {
+      text-align: center;
+      color: #969aa6;
     }
     .tag_box {
+      width: fit-content;
       border: 0.1rem solid yellow;
       background-color: yellow;
       border-radius: 0.3rem;
@@ -79,6 +112,7 @@ export default {
       font-weight: 600;
     }
     .callsign_box {
+      text-align: center;
       font-size: 1.5rem;
       color: #1cbc66;
       font-weight: 600;
@@ -105,6 +139,7 @@ export default {
 
   .brief_msg_box {
     .discribe_msg_box {
+      font-size: 1.2rem;
     }
   }
 }
