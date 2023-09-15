@@ -42,13 +42,18 @@ export default {
       ],
     };
   },
+  created() {
+    this.scrollBottom();
+  },
+  watch: {},
+  computed: {},
   methods: {
     scrollBottom() {
       this.$nextTick(() => {
         const scrollDom = this.$refs.chatBox;
         animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
       });
-    }
+    },
   },
 };
 </script>
