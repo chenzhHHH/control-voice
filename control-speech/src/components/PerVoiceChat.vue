@@ -100,7 +100,9 @@ export default {
       justify-content: center;
     }
     .chat_time_box {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #969aa6;
     }
     .tag_box {
@@ -112,7 +114,9 @@ export default {
       font-weight: 600;
     }
     .callsign_box {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1.5rem;
       color: #1cbc66;
       font-weight: 600;
