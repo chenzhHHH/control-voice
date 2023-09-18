@@ -1,6 +1,6 @@
 <template>
   <div class="sector_chat_container_box">
-    <div class="title_box" @click="add()">当前扇区 AC4</div>
+    <div class="title_box">当前扇区 AC4</div>
 
     <div class="chat_box" ref="chatBox">
       <div class="per_chat_box" v-for="(item, index) in perChatDatas" :key="index" :value="item">

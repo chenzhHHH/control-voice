@@ -6,21 +6,29 @@
       </el-aside>
 
       <el-container>
-        <el-header class="header_box">通信失效相关特情词</el-header>
+        <el-header class="header_box">
+          <SpecialWord></SpecialWord>
+        </el-header>
 
-        <el-main class="main_box">处置卡</el-main>
+        <el-main class="main_box">
+          <DisposalCard></DisposalCard>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-import SectorChat from '@/views/SectorChat.vue'
+import SectorChat from "@/views/SectorChatView.vue";
+import SpecialWord from "@/views/SpecialWordView.vue";
+import DisposalCard from "@/views/DisposalCardView.vue";
 
 export default {
   name: "HomeView",
   components: {
-    SectorChat
+    SectorChat,
+    SpecialWord,
+    DisposalCard
   },
 };
 </script>
@@ -29,16 +37,18 @@ export default {
 .common-layout {
   width: 100vw;
   height: 100vh;
-  .aside_box{
+  .aside_box {
     padding: 0 10px 0 10px;
     width: 50vw;
   }
-  .header_box{
-    background-color: red;
+  .header_box {
+    padding: 0 10px 0 10px;
+    background-color: #3b4253;
     height: 50vh;
   }
-  .main_box{
-    background-color: blue;
+  .main_box {
+    padding: 0 10px 0 10px;
+    background-color: #343a49;
     height: 50vh;
   }
 }
