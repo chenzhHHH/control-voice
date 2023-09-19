@@ -1,7 +1,7 @@
 <template>
   <div class="per_chat_container_box" :style="perChatData.isSelf ? 'flex-direction: row-reverse' : 'flex-direction: row'">
     <div class="profile_img_box">
-      <el-avatar :src="require('@/assets/logo.png')" />
+      <el-avatar :src="require('@/assets/' + perChatData.personImg)" />
     </div>
 
     <div :class="perChatData.isSelf ? 'content_box_self' : 'content_box_not_self'">

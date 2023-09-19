@@ -25,6 +25,7 @@ export default {
       perChatDatas: [
         {
           isSelf: true,
+          personImg: "self.png",
           chatTime: "12:30",
           tag: "",
           callsign: "CSN3301",
@@ -33,6 +34,7 @@ export default {
         },
         {
           isSelf: false,
+          personImg: "notself.png",
           chatTime: "12:30",
           tag: "复诵-缺失跑道20R",
           callsign: "CSN3301",
