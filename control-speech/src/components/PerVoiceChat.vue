@@ -102,6 +102,7 @@ export default {
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       .voice_icon {
         display: flex;
         flex-direction: row;
@@ -156,6 +157,7 @@ export default {
   .divider_box {
     .el-divider--horizontal {
       margin: 0.8rem 0 0.8rem 0;
+      border-color: #747f97;
     }
   }
 
