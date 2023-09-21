@@ -21,8 +21,7 @@
       padding: 1rem;
       overflow-y: scroll;
       box-sizing: border-box;
-      background-color: #fff;
-      color: #000;
+      background-color: #3b4253;
   
       &::-webkit-scrollbar {
         width: 0; /* Safari,Chrome 隐藏滚动条 */

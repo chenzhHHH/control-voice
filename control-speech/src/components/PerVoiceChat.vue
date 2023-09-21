@@ -3,9 +3,11 @@
     <el-row class="main_msg_box" v-if="perChatData.isSelf">
       <el-col :span="2">
         <div class="voice_icon_box">
-          <el-icon color="green" size="30">
-            <VideoPlay />
-          </el-icon>
+          <div class="voice_icon">
+            <el-icon color="#fff" size="25">
+              <CaretRight />
+            </el-icon>
+          </div>
         </div>
       </el-col>
 
@@ -49,9 +51,11 @@
 
       <el-col :span="2">
         <div class="voice_icon_box">
-          <el-icon color="green" size="30">
-            <VideoPlay />
-          </el-icon>
+          <div class="voice_icon">
+            <el-icon color="#fff" size="25">
+              <CaretRight />
+            </el-icon>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -87,7 +91,7 @@ export default {
 <style lang="scss" scoped>
 .per_voice_chat_container_box {
   min-width: 30rem;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   .main_msg_box {
     display: flex;
     flex-direction: row;
@@ -98,11 +102,22 @@ export default {
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      .voice_icon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: #1ec168;
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 0.9rem;
+      }
     }
     .chat_time_box {
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.2rem;
       color: #969aa6;
     }
     .tag_box {
@@ -139,6 +154,9 @@ export default {
   }
 
   .divider_box {
+    .el-divider--horizontal {
+      margin: 0.8rem 0 0.8rem 0;
+    }
   }
 
   .brief_msg_box {

@@ -43,12 +43,12 @@ export default {
   }
   .header_box {
     padding: 0 10px 0 10px;
-    background-color: #3b4253;
+    // background-color: #3b4253;
     height: 50vh;
   }
   .main_box {
     padding: 0 10px 0 10px;
-    background-color: #343a49;
+    // background-color: #343a49;
     height: 50vh;
   }
 }

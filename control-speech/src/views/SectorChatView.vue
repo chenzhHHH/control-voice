@@ -40,7 +40,7 @@ export default {
           callsign: "CSN3301",
           signal: "进",
           discribe: "<span style='color:#1dbf67'>进跑道</span>南方3301",
-        },
+        }
       ],
     };
   },
